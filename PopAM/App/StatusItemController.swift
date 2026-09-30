@@ -9,6 +9,9 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
     private let store: MetricsStore
     private let settings: SettingsStore
     private let openSettings: () -> Void
+    /// The transient popover closes on mouse-down; our action fires on mouse-up. Remember when it
+    /// closed so the click that closed it doesn't immediately reopen it.
+    private var lastClose = Date.distantPast
 
     init(store: MetricsStore, settings: SettingsStore, openSettings: @escaping () -> Void) {
         self.store = store
@@ -62,7 +65,8 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
     // MARK: Clicks
 
     @objc private func clicked(_ sender: NSStatusBarButton) {
-        if NSApp.currentEvent?.type == .rightMouseUp {
+        let event = NSApp.currentEvent
+        if event?.type == .rightMouseUp || event?.modifierFlags.contains(.control) == true {
             showMenu()
         } else {
             togglePopover(sender)
@@ -74,6 +78,7 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
             popover.performClose(nil)
             return
         }
+        guard Date().timeIntervalSince(lastClose) > 0.25 else { return }
         store.popoverVisible = true
         popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
         // Without activation, a transient popover in an LSUIElement app won't close on outside clicks.
@@ -83,6 +88,7 @@ final class StatusItemController: NSObject, NSPopoverDelegate {
 
     func popoverDidClose(_ notification: Notification) {
         store.popoverVisible = false
+        lastClose = Date()
     }
 
     private func showMenu() {

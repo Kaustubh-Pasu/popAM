@@ -40,7 +40,7 @@ private struct CoreBars: View {
                 ZStack(alignment: .bottom) {
                     RoundedRectangle(cornerRadius: 1).fill(.quaternary)
                     RoundedRectangle(cornerRadius: 1).fill(Color.accentColor)
-                        .frame(height: 20 * core.load)
+                        .frame(height: 20 * min(max(core.load, 0), 1))
                 }
                 .frame(width: 5, height: 20)
                 .help("Core \(core.index + 1): \(Formatters.percent(core.load))")
