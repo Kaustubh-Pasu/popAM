@@ -3,13 +3,19 @@ import Testing
 @testable import PopAMCore
 
 @MainActor
-struct SettingsStoreTests {
+final class SettingsStoreTests {
+    /// An absolute-path suite keeps the plist in the temp directory rather than ~/Library/Preferences.
+    private let suite = NSTemporaryDirectory() + "PopAMTests-\(UUID().uuidString)"
     private let defaults: UserDefaults
 
     init() {
-        let suite = "PopAMTests-\(UUID().uuidString)"
         defaults = UserDefaults(suiteName: suite)!
-        defaults.removePersistentDomain(forName: suite)
+    }
+
+    deinit {
+        UserDefaults(suiteName: suite)?.removePersistentDomain(forName: suite)
+        CFPreferencesAppSynchronize(suite as CFString)
+        try? FileManager.default.removeItem(atPath: suite + ".plist")
     }
 
     @Test func defaultsOnFirstLaunch() {
