@@ -48,10 +48,21 @@ public struct LiveCPUReader: CPUReading {
             let size = vm_size_t(Int(infoCount) * MemoryLayout<integer_t>.stride)
             vm_deallocate(mach_task_self_, vm_address_t(bitPattern: info), size)
         }
-        return (0..<Int(cpuCount)).map { core in
-            let base = core * Int(CPU_STATE_MAX)
+        guard let ticks = Self.coreTicks(from: UnsafeBufferPointer(start: info, count: Int(infoCount)),
+                                         cpuCount: Int(cpuCount)) else {
+            log.failure("host_processor_info returned \(infoCount) values for \(cpuCount) CPUs")
+            return nil
+        }
+        return ticks
+    }
+
+    /// Splits host_processor_info's flat array into per-core ticks; nil if `cpuCount` doesn't fit in it.
+    static func coreTicks(from info: UnsafeBufferPointer<integer_t>, cpuCount: Int) -> [CoreTicks]? {
+        let states = Int(CPU_STATE_MAX)
+        guard cpuCount > 0, cpuCount <= info.count / states else { return nil }
+        return (0..<cpuCount).map { core in
             func ticks(_ state: Int32) -> UInt64 {
-                UInt64(UInt32(bitPattern: info[base + Int(state)]))
+                UInt64(UInt32(bitPattern: info[core * states + Int(state)]))
             }
             return CoreTicks(user: ticks(CPU_STATE_USER), system: ticks(CPU_STATE_SYSTEM),
                              idle: ticks(CPU_STATE_IDLE), nice: ticks(CPU_STATE_NICE))
