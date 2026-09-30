@@ -18,7 +18,12 @@ public enum Formatters {
 
     /// Transfer rates (base 1000), e.g. "2.4 MB/s".
     public static func rate(_ bytesPerSec: Double) -> String {
-        file(UInt64(max(0, bytesPerSec))) + "/s"
+        // Per-call instance: ByteCountFormatter isn't Sendable, so no static under Swift 6.
+        let formatter = ByteCountFormatter()
+        formatter.countStyle = .file
+        formatter.allowedUnits = [.useKB, .useMB, .useGB, .useTB]
+        formatter.allowsNonnumericFormatting = false
+        return formatter.string(fromByteCount: Int64(max(0, min(bytesPerSec, 9e18)))) + "/s"
     }
 
     /// Short menu bar form: "8.1G", "120K", "0K". Values below 10 get one decimal.

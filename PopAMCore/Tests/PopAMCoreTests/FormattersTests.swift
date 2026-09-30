@@ -28,4 +28,10 @@ struct FormattersTests {
         #expect(Formatters.rate(-100).hasSuffix("/s"))
         #expect(!Formatters.rate(-100).contains("-"))
     }
+
+    @Test func rateIdleAndUnits() {
+        #expect(Formatters.rate(0) == "0 KB/s")
+        #expect(Formatters.rate(999).hasSuffix("KB/s"))
+        #expect(Formatters.rate(2_400_000) == "2.4 MB/s")
+    }
 }
