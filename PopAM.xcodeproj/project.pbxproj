@@ -1,0 +1,449 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0C950AAB261AD5034CA6334F /* HeaderSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CA643021F5631D809CA4E0E /* HeaderSection.swift */; };
+		0FAD3A8FF8C9D1F83B5AD5FF /* PopupTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46801CC48F48D7F782CE25E4 /* PopupTab.swift */; };
+		1C5028310254F992A8A4EA92 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D29ED3E9810DD263B3E03C5 /* AppDelegate.swift */; };
+		264BF1EDE61AAE0E93B69DFF /* NetworkSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97148E4CEA777E3F171857E /* NetworkSection.swift */; };
+		338E211D2A914DCDF1CDF2D4 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998A9192C560F8DABA5E6939 /* SettingsView.swift */; };
+		41C8A072ACF84304478ECCC8 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2E918A12F9F93D21BE1119 /* Main.swift */; };
+		4AA4482CB56EC2759D3A906E /* BatterySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CAF66495CC000695E87B24A /* BatterySection.swift */; };
+		550C01E0572FA5BC67AFC879 /* Term.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5B183E72301838BAA2285A /* Term.swift */; };
+		6B8A200734F8C32CEB8BF42E /* PopAMCore in Frameworks */ = {isa = PBXBuildFile; productRef = F57B42C0489EA9E0BC00E8F2 /* PopAMCore */; };
+		6BCC9751C2CFAE7D856BC041 /* CPUSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8AE687A884594D07390833 /* CPUSection.swift */; };
+		841B1AA0161FE03380EC8190 /* DiskSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC6ACFCAEEFE22A8C3A26C76 /* DiskSection.swift */; };
+		933CA65FE44A11B2CCB6DC5C /* StepGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 676F3984B250FCE27638B40C /* StepGraph.swift */; };
+		999538FB42AC480441D4CA99 /* MemorySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF868AE21835D888FF3C5B1C /* MemorySection.swift */; };
+		A2AE7C7C36E7C7788622D595 /* StatusItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164DE0B5D93322ABB73C38DD /* StatusItemController.swift */; };
+		A4757720A4AD75A51B0586B2 /* GeneralTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B6B40E17774895979FA5DEE /* GeneralTab.swift */; };
+		A9EF4423B848102D48D093FF /* MenuBarTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCDBADC9A80989F5D5BD81EA /* MenuBarTab.swift */; };
+		B35FB13DF6653B8B3A0C973C /* LaunchAtLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B78335859D3B7C3A3A8579 /* LaunchAtLogin.swift */; };
+		BB20E7E04C286AB7F9C2B0C5 /* SettingsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52520E5584390245EFDE4B29 /* SettingsWindowController.swift */; };
+		C217B7F0FF00A9EC4D6FE10E /* PopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2526EEE690A78E8DB0F879D6 /* PopoverView.swift */; };
+		ECA705B093970B5A1324889E /* BlockBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0F26CC46AFC665638F679D /* BlockBar.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0B6B40E17774895979FA5DEE /* GeneralTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralTab.swift; sourceTree = "<group>"; };
+		0CA643021F5631D809CA4E0E /* HeaderSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderSection.swift; sourceTree = "<group>"; };
+		164DE0B5D93322ABB73C38DD /* StatusItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusItemController.swift; sourceTree = "<group>"; };
+		1B5B183E72301838BAA2285A /* Term.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Term.swift; sourceTree = "<group>"; };
+		2526EEE690A78E8DB0F879D6 /* PopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverView.swift; sourceTree = "<group>"; };
+		2D0F26CC46AFC665638F679D /* BlockBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockBar.swift; sourceTree = "<group>"; };
+		3CAF66495CC000695E87B24A /* BatterySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatterySection.swift; sourceTree = "<group>"; };
+		46801CC48F48D7F782CE25E4 /* PopupTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupTab.swift; sourceTree = "<group>"; };
+		52520E5584390245EFDE4B29 /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
+		676F3984B250FCE27638B40C /* StepGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepGraph.swift; sourceTree = "<group>"; };
+		76B952D30B9B35A756628519 /* PopAMCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PopAMCore; path = PopAMCore; sourceTree = SOURCE_ROOT; };
+		89B78335859D3B7C3A3A8579 /* LaunchAtLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLogin.swift; sourceTree = "<group>"; };
+		8D29ED3E9810DD263B3E03C5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		998A9192C560F8DABA5E6939 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		BCDBADC9A80989F5D5BD81EA /* MenuBarTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarTab.swift; sourceTree = "<group>"; };
+		BE2E918A12F9F93D21BE1119 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
+		CC6ACFCAEEFE22A8C3A26C76 /* DiskSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskSection.swift; sourceTree = "<group>"; };
+		CD8AE687A884594D07390833 /* CPUSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPUSection.swift; sourceTree = "<group>"; };
+		D1914DB869B99F9E19AC3BDE /* PopAM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PopAM.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D97148E4CEA777E3F171857E /* NetworkSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSection.swift; sourceTree = "<group>"; };
+		E4A56A57A89CCA1CAFC03791 /* PopAM.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PopAM.entitlements; sourceTree = "<group>"; };
+		EF868AE21835D888FF3C5B1C /* MemorySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemorySection.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8AE46896120ED5423A66EBBF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6B8A200734F8C32CEB8BF42E /* PopAMCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		18B6FC5DAECBECDE0ACFCD04 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2526EEE690A78E8DB0F879D6 /* PopoverView.swift */,
+				BF378AE46287705714739B10 /* Settings */,
+				18D7ED65262BA74B2DC3CF50 /* Terminal */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		18D7ED65262BA74B2DC3CF50 /* Terminal */ = {
+			isa = PBXGroup;
+			children = (
+				3CAF66495CC000695E87B24A /* BatterySection.swift */,
+				2D0F26CC46AFC665638F679D /* BlockBar.swift */,
+				CD8AE687A884594D07390833 /* CPUSection.swift */,
+				CC6ACFCAEEFE22A8C3A26C76 /* DiskSection.swift */,
+				0CA643021F5631D809CA4E0E /* HeaderSection.swift */,
+				EF868AE21835D888FF3C5B1C /* MemorySection.swift */,
+				D97148E4CEA777E3F171857E /* NetworkSection.swift */,
+				676F3984B250FCE27638B40C /* StepGraph.swift */,
+				1B5B183E72301838BAA2285A /* Term.swift */,
+			);
+			path = Terminal;
+			sourceTree = "<group>";
+		};
+		463299270D005BC1DDE7BC69 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				8D29ED3E9810DD263B3E03C5 /* AppDelegate.swift */,
+				89B78335859D3B7C3A3A8579 /* LaunchAtLogin.swift */,
+				BE2E918A12F9F93D21BE1119 /* Main.swift */,
+				52520E5584390245EFDE4B29 /* SettingsWindowController.swift */,
+				164DE0B5D93322ABB73C38DD /* StatusItemController.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		4A10DEF3B838C12C82D12852 /* PopAM */ = {
+			isa = PBXGroup;
+			children = (
+				E4A56A57A89CCA1CAFC03791 /* PopAM.entitlements */,
+				463299270D005BC1DDE7BC69 /* App */,
+				18B6FC5DAECBECDE0ACFCD04 /* Views */,
+			);
+			path = PopAM;
+			sourceTree = "<group>";
+		};
+		6194CC96FFEC365359A6AA8A = {
+			isa = PBXGroup;
+			children = (
+				6CC3FBD02F322C91067D7199 /* Packages */,
+				4A10DEF3B838C12C82D12852 /* PopAM */,
+				7ECB51BDDE58385A6085FC2E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		6CC3FBD02F322C91067D7199 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				76B952D30B9B35A756628519 /* PopAMCore */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		7ECB51BDDE58385A6085FC2E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D1914DB869B99F9E19AC3BDE /* PopAM.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BF378AE46287705714739B10 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				0B6B40E17774895979FA5DEE /* GeneralTab.swift */,
+				BCDBADC9A80989F5D5BD81EA /* MenuBarTab.swift */,
+				46801CC48F48D7F782CE25E4 /* PopupTab.swift */,
+				998A9192C560F8DABA5E6939 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A727C7A5FCFB9E78358C97CE /* PopAM */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1E50B9A1C96178222E47EE27 /* Build configuration list for PBXNativeTarget "PopAM" */;
+			buildPhases = (
+				39052C96BDF1F163F05894F0 /* Sources */,
+				8AE46896120ED5423A66EBBF /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PopAM;
+			packageProductDependencies = (
+				F57B42C0489EA9E0BC00E8F2 /* PopAMCore */,
+			);
+			productName = PopAM;
+			productReference = D1914DB869B99F9E19AC3BDE /* PopAM.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8314FF70F3C68E5A6E47AE07 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					A727C7A5FCFB9E78358C97CE = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 73A3FA2D2548A84B613A5992 /* Build configuration list for PBXProject "PopAM" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 6194CC96FFEC365359A6AA8A;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				D356B67D766BE72E6434ACF2 /* XCLocalSwiftPackageReference "PopAMCore" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 7ECB51BDDE58385A6085FC2E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A727C7A5FCFB9E78358C97CE /* PopAM */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		39052C96BDF1F163F05894F0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1C5028310254F992A8A4EA92 /* AppDelegate.swift in Sources */,
+				4AA4482CB56EC2759D3A906E /* BatterySection.swift in Sources */,
+				ECA705B093970B5A1324889E /* BlockBar.swift in Sources */,
+				6BCC9751C2CFAE7D856BC041 /* CPUSection.swift in Sources */,
+				841B1AA0161FE03380EC8190 /* DiskSection.swift in Sources */,
+				A4757720A4AD75A51B0586B2 /* GeneralTab.swift in Sources */,
+				0C950AAB261AD5034CA6334F /* HeaderSection.swift in Sources */,
+				B35FB13DF6653B8B3A0C973C /* LaunchAtLogin.swift in Sources */,
+				41C8A072ACF84304478ECCC8 /* Main.swift in Sources */,
+				999538FB42AC480441D4CA99 /* MemorySection.swift in Sources */,
+				A9EF4423B848102D48D093FF /* MenuBarTab.swift in Sources */,
+				264BF1EDE61AAE0E93B69DFF /* NetworkSection.swift in Sources */,
+				C217B7F0FF00A9EC4D6FE10E /* PopoverView.swift in Sources */,
+				0FAD3A8FF8C9D1F83B5AD5FF /* PopupTab.swift in Sources */,
+				338E211D2A914DCDF1CDF2D4 /* SettingsView.swift in Sources */,
+				BB20E7E04C286AB7F9C2B0C5 /* SettingsWindowController.swift in Sources */,
+				A2AE7C7C36E7C7788622D595 /* StatusItemController.swift in Sources */,
+				933CA65FE44A11B2CCB6DC5C /* StepGraph.swift in Sources */,
+				550C01E0572FA5BC67AFC879 /* Term.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		11A7C3A8E32034F8B4CCC3A8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		324822C72F95DBFD709C532A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = PopAM/PopAM.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = popAM;
+				INFOPLIST_KEY_LSUIElement = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.popam.PopAM;
+				PRODUCT_NAME = popAM;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		8E66E782ECC67E3EAB14B7D4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = PopAM/PopAM.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_INJECT_BASE_ENTITLEMENTS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = popAM;
+				INFOPLIST_KEY_LSUIElement = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.popam.PopAM;
+				PRODUCT_NAME = popAM;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		DCCD23C78A7CB4AB696FD84C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1E50B9A1C96178222E47EE27 /* Build configuration list for PBXNativeTarget "PopAM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				324822C72F95DBFD709C532A /* Debug */,
+				8E66E782ECC67E3EAB14B7D4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		73A3FA2D2548A84B613A5992 /* Build configuration list for PBXProject "PopAM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				11A7C3A8E32034F8B4CCC3A8 /* Debug */,
+				DCCD23C78A7CB4AB696FD84C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		D356B67D766BE72E6434ACF2 /* XCLocalSwiftPackageReference "PopAMCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = PopAMCore;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F57B42C0489EA9E0BC00E8F2 /* PopAMCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PopAMCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 8314FF70F3C68E5A6E47AE07 /* Project object */;
+}
