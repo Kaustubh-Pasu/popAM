@@ -8,7 +8,7 @@ public struct BatterySource {
     public func sample() -> Reading<BatterySnapshot> {
         guard let raw = reader.read() else { return .unavailable }
         let percent = raw.maxCapacity > 0
-            ? Int((Double(raw.currentCapacity) / Double(raw.maxCapacity) * 100).rounded())
+            ? Int(clampingRounded: Double(raw.currentCapacity) / Double(raw.maxCapacity) * 100)
             : 0
         let state: PowerState =
             if raw.isCharging { .charging }
@@ -28,6 +28,6 @@ public struct BatterySource {
     static func health(_ raw: BatteryRaw) -> Int? {
         guard let full = raw.rawMaxCapacity, let design = raw.designCapacity, design > 0 else { return nil }
         // A new battery can exceed its design capacity; System Settings shows that as 100%.
-        return min(100, Int((Double(full) / Double(design) * 100).rounded()))
+        return min(100, max(0, Int(clampingRounded: Double(full) / Double(design) * 100)))
     }
 }

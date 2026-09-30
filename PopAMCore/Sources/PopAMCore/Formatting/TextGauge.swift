@@ -4,6 +4,7 @@ public enum TextGauge {
 
     /// 0.5, width 4 -> "██░░". Out-of-range and NaN input is clamped to 0...1.
     public static func bar(_ fraction: Double, width: Int = 18) -> String {
+        let width = max(0, width)
         let filled = Int((clamp(fraction) * Double(width)).rounded())
         return String(repeating: "█", count: filled) + String(repeating: "░", count: width - filled)
     }

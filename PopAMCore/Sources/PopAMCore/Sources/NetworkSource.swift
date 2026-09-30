@@ -24,8 +24,8 @@ public struct NetworkSource {
             guard let before = last.totals[name],
                   now.receivedBytes >= before.receivedBytes, now.sentBytes >= before.sentBytes
             else { continue }
-            down += now.receivedBytes - before.receivedBytes
-            up += now.sentBytes - before.sentBytes
+            down = down.saturatingAdd(now.receivedBytes - before.receivedBytes)
+            up = up.saturatingAdd(now.sentBytes - before.sentBytes)
             contributing += 1
         }
         guard contributing > 0 else { return .unavailable }

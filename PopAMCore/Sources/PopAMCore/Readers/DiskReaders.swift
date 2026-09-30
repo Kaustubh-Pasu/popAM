@@ -68,8 +68,8 @@ public struct LiveDiskIOReader: DiskIOReading {
             guard let stats = IORegistryEntryCreateCFProperty(service, "Statistics" as CFString,
                                                               kCFAllocatorDefault, 0)?
                 .takeRetainedValue() as? [String: Any] else { continue }
-            read += (stats["Bytes (Read)"] as? NSNumber)?.uint64Value ?? 0
-            written += (stats["Bytes (Write)"] as? NSNumber)?.uint64Value ?? 0
+            read = read.saturatingAdd((stats["Bytes (Read)"] as? NSNumber)?.uint64Value ?? 0)
+            written = written.saturatingAdd((stats["Bytes (Write)"] as? NSNumber)?.uint64Value ?? 0)
             found = true
         }
         return found ? DiskIOTotals(readBytes: read, writtenBytes: written) : nil
