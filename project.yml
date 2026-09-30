@@ -1,0 +1,29 @@
+name: PopAM
+options:
+  bundleIdPrefix: com.popam
+  deploymentTarget:
+    macOS: "14.0"
+packages:
+  PopAMCore:
+    path: PopAMCore
+targets:
+  PopAM:
+    type: application
+    platform: macOS
+    sources: [PopAM]
+    dependencies:
+      - package: PopAMCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.popam.PopAM
+        PRODUCT_NAME: popAM
+        MARKETING_VERSION: "0.1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        SWIFT_VERSION: "6.0"
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_LSUIElement: YES
+        INFOPLIST_KEY_CFBundleDisplayName: popAM
+        CODE_SIGN_ENTITLEMENTS: PopAM/PopAM.entitlements
+        CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_IDENTITY: "-"
+        ENABLE_HARDENED_RUNTIME: YES
