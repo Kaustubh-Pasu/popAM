@@ -56,8 +56,8 @@ public struct LiveBatteryReader: BatteryReading {
             timeToEmpty: desc[kIOPSTimeToEmptyKey] as? Int ?? -1,
             timeToFull: desc[kIOPSTimeToFullChargeKey] as? Int ?? -1,
             cycleCount: Self.smartBattery("CycleCount"),
-            rawMaxCapacity: Self.smartBattery("AppleRawMaxCapacity"),
-            designCapacity: Self.smartBattery("DesignCapacity"))
+            rawMaxCapacity: Self.smartBattery("AppleRawMaxCapacity", nested: "NominalChargeCapacity"),
+            designCapacity: Self.smartBattery("DesignCapacity", nested: "DesignCapacity"))
     }
 
     private static func internalBattery() -> [String: Any]? {
@@ -73,11 +73,17 @@ public struct LiveBatteryReader: BatteryReading {
         return nil
     }
 
-    private static func smartBattery(_ key: String) -> Int? {
+    /// A top-level AppleSmartBattery property, falling back to `nested` inside its `BatteryData`
+    /// dictionary (newer macOS only reports capacities there).
+    private static func smartBattery(_ key: String, nested: String? = nil) -> Int? {
         let service = IOServiceGetMatchingService(kIOMainPortDefault, IOServiceMatching("AppleSmartBattery"))
         guard service != 0 else { return nil }
         defer { IOObjectRelease(service) }
-        return IORegistryEntryCreateCFProperty(service, key as CFString, kCFAllocatorDefault, 0)?
-            .takeRetainedValue() as? Int
+        func property(_ name: String) -> Any? {
+            IORegistryEntryCreateCFProperty(service, name as CFString, kCFAllocatorDefault, 0)?.takeRetainedValue()
+        }
+        if let value = property(key) as? Int { return value }
+        guard let nested, let data = property("BatteryData") as? [String: Any] else { return nil }
+        return data[nested] as? Int
     }
 }

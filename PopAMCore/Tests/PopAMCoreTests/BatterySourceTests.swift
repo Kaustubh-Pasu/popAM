@@ -66,6 +66,10 @@ struct BatterySourceTests {
         #expect(try #require(sample(battery(rawMax: 4976, design: 5000)).current).healthPercent == 100)
     }
 
+    @Test func healthCapsAtHundredLikeSystemSettings() throws {
+        #expect(try #require(sample(battery(rawMax: 6509, design: 6249)).current).healthPercent == 100)
+    }
+
     @Test func healthNilWhenCapacityMissing() throws {
         #expect(try #require(sample(battery(rawMax: nil)).current).healthPercent == nil)
         #expect(try #require(sample(battery(design: nil)).current).healthPercent == nil)
@@ -84,5 +88,6 @@ struct LiveBatteryReaderTests {
     func battery() throws {
         let snap = try #require(BatterySource(reader: LiveBatteryReader()).sample().current)
         #expect((0...100).contains(snap.percent))
+        #expect((1...100).contains(try #require(snap.healthPercent)))
     }
 }

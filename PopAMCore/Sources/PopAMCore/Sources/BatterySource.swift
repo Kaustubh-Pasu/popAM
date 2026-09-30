@@ -27,6 +27,7 @@ public struct BatterySource {
 
     static func health(_ raw: BatteryRaw) -> Int? {
         guard let full = raw.rawMaxCapacity, let design = raw.designCapacity, design > 0 else { return nil }
-        return Int((Double(full) / Double(design) * 100).rounded())
+        // A new battery can exceed its design capacity; System Settings shows that as 100%.
+        return min(100, Int((Double(full) / Double(design) * 100).rounded()))
     }
 }
