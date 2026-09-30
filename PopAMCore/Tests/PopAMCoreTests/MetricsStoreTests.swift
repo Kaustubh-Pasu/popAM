@@ -32,7 +32,8 @@ final class MetricsStoreTests {
             cpu: FakeCPUReader(cpuScript), topology: nil,
             memory: FakeMemoryReader(), network: FakeNetworkReader(netScript),
             diskSpace: FakeDiskSpaceReader(), diskIO: FakeDiskIOReader([nil]),
-            battery: FakeBatteryReader(isPresent: batteryPresent, raw: batteryPresent ? battery() : nil))
+            battery: FakeBatteryReader(isPresent: batteryPresent, raw: batteryPresent ? battery() : nil),
+            system: FakeSystemReader())
         let box = time
         return MetricsStore(settings: settings, readers: readers, now: { box.value })
     }
@@ -72,6 +73,15 @@ final class MetricsStoreTests {
         #expect(store.snapshots.disk == .unavailable)
         store.popoverVisible = false
         #expect(!store.isLoopRunning)
+    }
+
+    @Test func systemInfoSampledOnlyWhilePopoverOpen() {
+        let store = makeStore()
+        settings.menuBarMode = .iconAndText
+        advance(store, times: 1)
+        #expect(store.snapshots.system == .unavailable)
+        store.popoverVisible = true
+        #expect(store.snapshots.system.current?.loadAverage?.one == 2.14)
     }
 
     @Test func computesValuesThroughSources() throws {

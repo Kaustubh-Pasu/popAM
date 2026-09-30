@@ -26,6 +26,7 @@ public final class MetricsStore {
     @ObservationIgnored private var network: NetworkSource
     @ObservationIgnored private var disk: DiskSource
     @ObservationIgnored private let battery: BatterySource
+    @ObservationIgnored private let system: SystemSource
     @ObservationIgnored private var loop: Task<Void, Never>?
     @ObservationIgnored private var plannedMetrics: Set<MetricKind> = []
 
@@ -39,6 +40,7 @@ public final class MetricsStore {
         network = NetworkSource(reader: readers.network)
         disk = DiskSource(space: readers.diskSpace, io: readers.diskIO)
         battery = BatterySource(reader: readers.battery)
+        system = SystemSource(reader: readers.system)
     }
 
     /// Metrics that need sampling right now.
@@ -65,6 +67,8 @@ public final class MetricsStore {
     /// Samples every active metric once.
     public func tick() {
         let time = now()
+        // Uptime and load average only appear in the popover header.
+        if popoverVisible { snapshots.system = system.sample(now: Date()) }
         for kind in activeMetrics {
             switch kind {
             case .cpu:
