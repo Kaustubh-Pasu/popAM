@@ -27,3 +27,8 @@ targets:
         CODE_SIGN_STYLE: Automatic
         CODE_SIGN_IDENTITY: "-"
         ENABLE_HARDENED_RUNTIME: YES
+      configs:
+        # Ad-hoc signing otherwise injects get-task-allow, which lets debuggers attach to a
+        # shipped build and makes notarization fail.
+        Release:
+          CODE_SIGN_INJECT_BASE_ENTITLEMENTS: NO
