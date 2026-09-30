@@ -5,8 +5,19 @@ import ServiceManagement
 @MainActor
 @Observable
 final class LaunchAtLogin {
-    private(set) var isEnabled = SMAppService.mainApp.status == .enabled
+    private(set) var isEnabled = false
+    /// Registered, but the user still has to allow it in System Settings → Login Items.
+    private(set) var needsApproval = false
     private(set) var errorMessage: String?
+
+    init() { refresh() }
+
+    /// Re-reads the system state; the user can change Login Items in System Settings at any time.
+    func refresh() {
+        let status = SMAppService.mainApp.status
+        isEnabled = status == .enabled
+        needsApproval = status == .requiresApproval
+    }
 
     func set(_ enabled: Bool) {
         do {
@@ -20,6 +31,6 @@ final class LaunchAtLogin {
             errorMessage = error.localizedDescription
         }
         // On failure this reverts the toggle.
-        isEnabled = SMAppService.mainApp.status == .enabled
+        refresh()
     }
 }

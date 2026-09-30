@@ -22,7 +22,9 @@ struct MenuBarTab: View {
                 }
                 Picker("Second value", selection: second) {
                     Text("None").tag(MenuBarValue?.none)
-                    ForEach(choices, id: \.self) { Text($0.label).tag(Optional($0)) }
+                    ForEach(choices.filter { $0 != settings.menuBarValues.first }, id: \.self) {
+                        Text($0.label).tag(Optional($0))
+                    }
                 }
             }
         }
@@ -38,7 +40,7 @@ struct MenuBarTab: View {
             })
     }
 
-    /// Choosing the same value as the first one clears the second.
+    /// Offers every value except the one already chosen first.
     private var second: Binding<MenuBarValue?> {
         Binding(
             get: { settings.menuBarValues.dropFirst().first },
