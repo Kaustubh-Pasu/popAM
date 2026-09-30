@@ -53,8 +53,10 @@ public struct LiveBatteryReader: BatteryReading {
     }
 
     private static func internalBattery() -> [String: Any]? {
-        let info = IOPSCopyPowerSourcesInfo().takeRetainedValue()
-        let list = IOPSCopyPowerSourcesList(info).takeRetainedValue() as [CFTypeRef]
+        // Both calls can return NULL, which takeRetainedValue() on the implicit unwrap would trap on.
+        guard let info = IOPSCopyPowerSourcesInfo()?.takeRetainedValue(),
+              let list = IOPSCopyPowerSourcesList(info)?.takeRetainedValue() as? [CFTypeRef]
+        else { return nil }
         for source in list {
             guard let desc = IOPSGetPowerSourceDescription(info, source)?
                 .takeUnretainedValue() as? [String: Any] else { continue }
