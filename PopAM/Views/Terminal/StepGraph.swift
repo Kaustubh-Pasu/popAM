@@ -2,9 +2,9 @@ import Charts
 import PopAMCore
 import SwiftUI
 
-/// Axis-free line graph of the last `History.capacity` samples, right-aligned so new values enter at the right.
-struct Sparkline: View {
-    /// One or two series; the second is drawn in orange.
+/// Step-line graph of the last `History.capacity` samples over a dashed grid. New values enter at the right.
+struct StepGraph: View {
+    /// First series solid ink; a second one is dimmed and dashed.
     let series: [[Double]]
     /// Fixed top of the Y axis, or nil to auto-scale to the largest value.
     let maxY: Double?
@@ -21,15 +21,20 @@ struct Sparkline: View {
                 ForEach(values.indices, id: \.self) { i in
                     LineMark(x: .value("Sample", i + offset), y: .value("Value", values[i]),
                              series: .value("Series", s))
-                        .foregroundStyle(s == 0 ? Color.accentColor : Color.orange)
-                        .interpolationMethod(.monotone)
+                        .foregroundStyle(s == 0 ? Term.ink : Term.dim)
+                        .lineStyle(StrokeStyle(lineWidth: 1.5, dash: s == 0 ? [] : [3, 2]))
+                        .interpolationMethod(.stepCenter)
                 }
             }
         }
         .chartXScale(domain: 0...(History.capacity - 1))
         .chartYScale(domain: 0...top)
         .chartXAxis(.hidden)
-        .chartYAxis(.hidden)
-        .frame(height: 32)
+        .chartYAxis {
+            AxisMarks(values: .automatic(desiredCount: 3)) { _ in
+                AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [2, 3])).foregroundStyle(Term.faint)
+            }
+        }
+        .frame(height: 38)
     }
 }
