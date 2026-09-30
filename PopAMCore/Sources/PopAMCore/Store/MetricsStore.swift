@@ -27,6 +27,7 @@ public final class MetricsStore {
     @ObservationIgnored private var disk: DiskSource
     @ObservationIgnored private let battery: BatterySource
     @ObservationIgnored private var loop: Task<Void, Never>?
+    @ObservationIgnored private var plannedMetrics: Set<MetricKind> = []
 
     /// - Parameter now: monotonic seconds; injectable for tests.
     public init(settings: SettingsStore, readers: MetricReaders,
@@ -97,13 +98,22 @@ public final class MetricsStore {
     }
 
     private func updateLoop() {
+        let active = activeMetrics
+        // Metrics that stopped being sampled lose their baselines and graphs, so a later
+        // reactivation never reports an average over the idle gap.
+        for kind in plannedMetrics.subtracting(active) { forget(kind) }
+        let newlyActive = !active.subtracting(plannedMetrics).isEmpty
+        plannedMetrics = active
         loop?.cancel()
         loop = nil
-        guard !activeMetrics.isEmpty else { return }
+        guard !active.isEmpty else { return }
         loop = Task { [weak self] in
+            // A newly activated delta metric has no baseline yet; get its first real value quickly.
+            var firstSleep = newlyActive
             while !Task.isCancelled {
                 guard let interval = self?.settings.refreshInterval else { return }
-                try? await Task.sleep(for: .seconds(interval))
+                try? await Task.sleep(for: .seconds(firstSleep ? min(interval, 0.5) : interval))
+                firstSleep = false
                 guard !Task.isCancelled else { return }
                 self?.tick()
             }
@@ -122,6 +132,28 @@ public final class MetricsStore {
                 self?.updateLoop()
                 self?.observeSettings()
             }
+        }
+    }
+
+    private func forget(_ kind: MetricKind) {
+        switch kind {
+        case .cpu:
+            cpu.reset()
+            history.clear(.cpu)
+            snapshots.cpu = .unavailable
+        case .memory:
+            history.clear(.memory)
+            snapshots.memory = .unavailable
+        case .network:
+            network.reset()
+            history.clear(.netDown)
+            history.clear(.netUp)
+            snapshots.network = .unavailable
+        case .disk:
+            disk.reset()
+            snapshots.disk = .unavailable
+        case .battery:
+            snapshots.battery = .unavailable
         }
     }
 }

@@ -101,4 +101,31 @@ struct MetricsStoreTests {
         #expect(!store.activeMetrics.contains(.battery))
         #expect(!store.batteryPresent)
     }
+
+    @Test func closingPopoverDropsDeltaBaselines() throws {
+        let store = makeStore()                      // defaults: icon only
+        store.popoverVisible = true
+        advance(store, times: 3)
+        store.popoverVisible = false
+        #expect(store.history.cpu.isEmpty)
+        #expect(store.snapshots.cpu == .unavailable)
+        time.value += 600                            // closed for 10 minutes
+        store.popoverVisible = true
+        #expect(store.snapshots.cpu == .unavailable) // not a 10-minute average
+        #expect(store.snapshots.memory.current != nil)
+        advance(store, times: 1)
+        #expect(try #require(store.snapshots.cpu.current).total == 0.5)
+    }
+
+    @Test func settingsChangeReplansLoop() async {
+        let store = makeStore()
+        store.start()
+        #expect(!store.isLoopRunning)
+        settings.menuBarMode = .iconAndText
+        for _ in 0..<100 where !store.isLoopRunning { await Task.yield() }
+        #expect(store.isLoopRunning)
+        settings.menuBarMode = .iconOnly
+        for _ in 0..<100 where store.isLoopRunning { await Task.yield() }
+        #expect(!store.isLoopRunning)
+    }
 }

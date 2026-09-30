@@ -21,6 +21,15 @@ public struct History: Sendable, Equatable {
         }
     }
 
+    mutating func clear(_ series: Series) {
+        switch series {
+        case .cpu: cpu = []
+        case .memory: memory = []
+        case .netDown: netDown = []
+        case .netUp: netUp = []
+        }
+    }
+
     private static func append(_ value: Double, to values: inout [Double]) {
         values.append(value)
         if values.count > capacity { values.removeFirst(values.count - capacity) }
