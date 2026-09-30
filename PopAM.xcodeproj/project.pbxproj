@@ -7,14 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0FAD3A8FF8C9D1F83B5AD5FF /* PopupTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46801CC48F48D7F782CE25E4 /* PopupTab.swift */; };
 		1C5028310254F992A8A4EA92 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D29ED3E9810DD263B3E03C5 /* AppDelegate.swift */; };
+		338E211D2A914DCDF1CDF2D4 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 998A9192C560F8DABA5E6939 /* SettingsView.swift */; };
 		3EDFACAA6756F369E2B8358E /* NetworkCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B037A10DBDA0723AC4C8483 /* NetworkCard.swift */; };
 		41C8A072ACF84304478ECCC8 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE2E918A12F9F93D21BE1119 /* Main.swift */; };
 		6B8A200734F8C32CEB8BF42E /* PopAMCore in Frameworks */ = {isa = PBXBuildFile; productRef = F57B42C0489EA9E0BC00E8F2 /* PopAMCore */; };
 		789957F819DB5432A989A215 /* CardHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B20796BCB01375FD263C53 /* CardHeader.swift */; };
 		7D3C63F01D864F1EA5E95EE9 /* Sparkline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29630C95357984E983530A55 /* Sparkline.swift */; };
 		A2AE7C7C36E7C7788622D595 /* StatusItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164DE0B5D93322ABB73C38DD /* StatusItemController.swift */; };
+		A4757720A4AD75A51B0586B2 /* GeneralTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B6B40E17774895979FA5DEE /* GeneralTab.swift */; };
+		A9EF4423B848102D48D093FF /* MenuBarTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCDBADC9A80989F5D5BD81EA /* MenuBarTab.swift */; };
+		B35FB13DF6653B8B3A0C973C /* LaunchAtLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B78335859D3B7C3A3A8579 /* LaunchAtLogin.swift */; };
 		B650CF66CEFEAACD9D743143 /* CPUCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB92E53A75546B812A44A558 /* CPUCard.swift */; };
+		BB20E7E04C286AB7F9C2B0C5 /* SettingsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52520E5584390245EFDE4B29 /* SettingsWindowController.swift */; };
 		BF821E1B550854C83382F178 /* DiskCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A23AA85CEAC7F2522282F1 /* DiskCard.swift */; };
 		C217B7F0FF00A9EC4D6FE10E /* PopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2526EEE690A78E8DB0F879D6 /* PopoverView.swift */; };
 		E6EA5E1B73307A646E6C8D4A /* MemoryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FD997F65EF692FB0F16489 /* MemoryCard.swift */; };
@@ -23,13 +29,19 @@
 
 /* Begin PBXFileReference section */
 		0B037A10DBDA0723AC4C8483 /* NetworkCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkCard.swift; sourceTree = "<group>"; };
+		0B6B40E17774895979FA5DEE /* GeneralTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralTab.swift; sourceTree = "<group>"; };
 		164DE0B5D93322ABB73C38DD /* StatusItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusItemController.swift; sourceTree = "<group>"; };
 		2526EEE690A78E8DB0F879D6 /* PopoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopoverView.swift; sourceTree = "<group>"; };
 		29630C95357984E983530A55 /* Sparkline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sparkline.swift; sourceTree = "<group>"; };
 		3238165595A0C098A6DB995C /* BatteryCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryCard.swift; sourceTree = "<group>"; };
+		46801CC48F48D7F782CE25E4 /* PopupTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupTab.swift; sourceTree = "<group>"; };
+		52520E5584390245EFDE4B29 /* SettingsWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindowController.swift; sourceTree = "<group>"; };
 		76B952D30B9B35A756628519 /* PopAMCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PopAMCore; path = PopAMCore; sourceTree = SOURCE_ROOT; };
+		89B78335859D3B7C3A3A8579 /* LaunchAtLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLogin.swift; sourceTree = "<group>"; };
 		8D29ED3E9810DD263B3E03C5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		998A9192C560F8DABA5E6939 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		A5B20796BCB01375FD263C53 /* CardHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardHeader.swift; sourceTree = "<group>"; };
+		BCDBADC9A80989F5D5BD81EA /* MenuBarTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarTab.swift; sourceTree = "<group>"; };
 		BE2E918A12F9F93D21BE1119 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		D1914DB869B99F9E19AC3BDE /* PopAM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PopAM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2A23AA85CEAC7F2522282F1 /* DiskCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskCard.swift; sourceTree = "<group>"; };
@@ -57,6 +69,7 @@
 				2526EEE690A78E8DB0F879D6 /* PopoverView.swift */,
 				29630C95357984E983530A55 /* Sparkline.swift */,
 				D75006B7FB5C08D4D9F42E55 /* Cards */,
+				BF378AE46287705714739B10 /* Settings */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -65,7 +78,9 @@
 			isa = PBXGroup;
 			children = (
 				8D29ED3E9810DD263B3E03C5 /* AppDelegate.swift */,
+				89B78335859D3B7C3A3A8579 /* LaunchAtLogin.swift */,
 				BE2E918A12F9F93D21BE1119 /* Main.swift */,
+				52520E5584390245EFDE4B29 /* SettingsWindowController.swift */,
 				164DE0B5D93322ABB73C38DD /* StatusItemController.swift */,
 			);
 			path = App;
@@ -104,6 +119,17 @@
 				D1914DB869B99F9E19AC3BDE /* PopAM.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		BF378AE46287705714739B10 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				0B6B40E17774895979FA5DEE /* GeneralTab.swift */,
+				BCDBADC9A80989F5D5BD81EA /* MenuBarTab.swift */,
+				46801CC48F48D7F782CE25E4 /* PopupTab.swift */,
+				998A9192C560F8DABA5E6939 /* SettingsView.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		D75006B7FB5C08D4D9F42E55 /* Cards */ = {
@@ -186,10 +212,16 @@
 				B650CF66CEFEAACD9D743143 /* CPUCard.swift in Sources */,
 				789957F819DB5432A989A215 /* CardHeader.swift in Sources */,
 				BF821E1B550854C83382F178 /* DiskCard.swift in Sources */,
+				A4757720A4AD75A51B0586B2 /* GeneralTab.swift in Sources */,
+				B35FB13DF6653B8B3A0C973C /* LaunchAtLogin.swift in Sources */,
 				41C8A072ACF84304478ECCC8 /* Main.swift in Sources */,
 				E6EA5E1B73307A646E6C8D4A /* MemoryCard.swift in Sources */,
+				A9EF4423B848102D48D093FF /* MenuBarTab.swift in Sources */,
 				3EDFACAA6756F369E2B8358E /* NetworkCard.swift in Sources */,
 				C217B7F0FF00A9EC4D6FE10E /* PopoverView.swift in Sources */,
+				0FAD3A8FF8C9D1F83B5AD5FF /* PopupTab.swift in Sources */,
+				338E211D2A914DCDF1CDF2D4 /* SettingsView.swift in Sources */,
+				BB20E7E04C286AB7F9C2B0C5 /* SettingsWindowController.swift in Sources */,
 				7D3C63F01D864F1EA5E95EE9 /* Sparkline.swift in Sources */,
 				A2AE7C7C36E7C7788622D595 /* StatusItemController.swift in Sources */,
 			);
