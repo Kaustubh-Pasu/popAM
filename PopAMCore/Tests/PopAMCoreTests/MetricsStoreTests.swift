@@ -1,0 +1,104 @@
+import Foundation
+import Testing
+@testable import PopAMCore
+
+@MainActor
+struct MetricsStoreTests {
+    private let settings: SettingsStore
+    private var time = TimeBox()
+
+    final class TimeBox { var value = 0.0 }
+
+    init() {
+        let suite = "PopAMStoreTests-\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suite)!
+        defaults.removePersistentDomain(forName: suite)
+        settings = SettingsStore(defaults: defaults)
+    }
+
+    /// CPU ticks rise by 50 busy / 50 idle every sample → 50%.
+    private func makeStore(batteryPresent: Bool = true) -> MetricsStore {
+        let cpuScript = (0..<100).map { i in [ticks(UInt64(i) * 50, 0, UInt64(i) * 50)] }
+        let netScript = (0..<100).map { i in
+            Optional(NetworkTotals(receivedBytes: UInt64(i) * 2000, sentBytes: UInt64(i) * 200))
+        }
+        let readers = MetricReaders(
+            cpu: FakeCPUReader(cpuScript), topology: nil,
+            memory: FakeMemoryReader(), network: FakeNetworkReader(netScript),
+            diskSpace: FakeDiskSpaceReader(), diskIO: FakeDiskIOReader([nil]),
+            battery: FakeBatteryReader(isPresent: batteryPresent, raw: batteryPresent ? battery() : nil))
+        let box = time
+        return MetricsStore(settings: settings, readers: readers, now: { box.value })
+    }
+
+    private func advance(_ store: MetricsStore, times: Int) {
+        for _ in 0..<times {
+            time.value += 2
+            store.tick()
+        }
+    }
+
+    @Test func iconOnlyAndClosedSamplesNothingAndStopsLoop() {
+        let store = makeStore()
+        store.start()
+        #expect(store.activeMetrics.isEmpty)
+        #expect(!store.isLoopRunning)
+        #expect(store.snapshots == Snapshots())
+    }
+
+    @Test func closedWithTextSamplesOnlyMenuBarMetrics() {
+        let store = makeStore()
+        settings.menuBarMode = .iconAndText
+        settings.setMenuBarValues([.cpuPercent, .netDown])
+        #expect(store.activeMetrics == [.cpu, .network])
+        advance(store, times: 2)
+        #expect(store.snapshots.cpu.current != nil)
+        #expect(store.snapshots.memory == .unavailable)
+    }
+
+    @Test func openSamplesEnabledCardsImmediately() {
+        let store = makeStore()
+        settings.setCardEnabled(.disk, false)
+        store.popoverVisible = true
+        #expect(store.activeMetrics == [.cpu, .memory, .network, .battery])
+        #expect(store.isLoopRunning)
+        #expect(store.snapshots.memory.current != nil)   // no waiting a full interval
+        #expect(store.snapshots.disk == .unavailable)
+        store.popoverVisible = false
+        #expect(!store.isLoopRunning)
+    }
+
+    @Test func computesValuesThroughSources() throws {
+        let store = makeStore()
+        store.popoverVisible = true
+        advance(store, times: 1)
+        #expect(try #require(store.snapshots.cpu.current).total == 0.5)
+        #expect(try #require(store.snapshots.network.current).downBytesPerSec == 1000)
+    }
+
+    @Test func historyCappedAtThirty() {
+        let store = makeStore()
+        store.popoverVisible = true
+        advance(store, times: 45)
+        #expect(store.history.cpu.count == History.capacity)
+        #expect(store.history.memory.count == History.capacity)
+        #expect(store.history.netDown.count == History.capacity)
+    }
+
+    @Test func wakeClearsHistoryAndDeltaBaselines() {
+        let store = makeStore()
+        store.popoverVisible = true
+        advance(store, times: 5)
+        store.handleWake()
+        #expect(store.history.cpu.isEmpty)
+        #expect(store.snapshots.cpu == .unavailable)       // first post-wake sample
+        #expect(store.snapshots.memory.current != nil)     // non-delta metrics still show
+    }
+
+    @Test func noBatteryNeverSamplesBattery() {
+        let store = makeStore(batteryPresent: false)
+        store.popoverVisible = true
+        #expect(!store.activeMetrics.contains(.battery))
+        #expect(!store.batteryPresent)
+    }
+}
