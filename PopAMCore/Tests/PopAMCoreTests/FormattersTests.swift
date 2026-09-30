@@ -34,4 +34,24 @@ struct FormattersTests {
         #expect(Formatters.rate(999).hasSuffix("KB/s"))
         #expect(Formatters.rate(2_400_000) == "2.4 MB/s")
     }
+
+    @Test func uptime() {
+        #expect(Formatters.uptime(seconds: 30) == "0m")
+        #expect(Formatters.uptime(seconds: 12 * 60 + 59) == "12m")
+        #expect(Formatters.uptime(seconds: 4 * 3600 + 12 * 60) == "4h 12m")
+        #expect(Formatters.uptime(seconds: 3 * 86400 + 4 * 3600 + 59 * 60) == "3d 4h")
+        #expect(Formatters.uptime(seconds: -5) == "0m")
+    }
+
+    @Test func loadAverage() {
+        #expect(Formatters.loadAverage(LoadAverage(one: 2.144, five: 1.87, fifteen: 1.6)) == "2.14 · 1.87 · 1.60")
+    }
+
+    @Test func gigabytes() {
+        let gib = 1024.0 * 1024 * 1024
+        #expect(Formatters.gigabytes(UInt64(8.1 * gib)) == "8.1")
+        #expect(Formatters.gigabytes(0) == "0.0")
+        #expect(Formatters.wholeGigabytes(UInt64(16 * gib), base: 1024) == "16")
+        #expect(Formatters.wholeGigabytes(212_400_000_000, base: 1000) == "212")
+    }
 }
