@@ -11,8 +11,8 @@ public struct NetworkTotals: Sendable, Equatable {
 }
 
 public protocol NetworkReading {
-    /// Cumulative bytes over all up, non-loopback interfaces, or nil on failure.
-    func totals() -> NetworkTotals?
+    /// Cumulative bytes per up, non-loopback interface (keyed by name), or nil on failure.
+    func interfaceTotals() -> [String: NetworkTotals]?
 }
 
 public struct LiveNetworkReader: NetworkReading {
@@ -20,7 +20,7 @@ public struct LiveNetworkReader: NetworkReading {
 
     public init() {}
 
-    public func totals() -> NetworkTotals? {
+    public func interfaceTotals() -> [String: NetworkTotals]? {
         // NET_RT_IFLIST2 gives 64-bit counters; getifaddrs' if_data is 32-bit and wraps at 4 GB.
         var mib: [Int32] = [CTL_NET, PF_ROUTE, 0, 0, NET_RT_IFLIST2, 0]
         var length = 0
@@ -33,8 +33,7 @@ public struct LiveNetworkReader: NetworkReading {
             log.failure("sysctl NET_RT_IFLIST2 failed")
             return nil
         }
-        var received: UInt64 = 0
-        var sent: UInt64 = 0
+        var result: [String: NetworkTotals] = [:]
         buffer.withUnsafeBytes { raw in
             var offset = 0
             while offset + MemoryLayout<if_msghdr>.size <= length {
@@ -44,13 +43,17 @@ public struct LiveNetworkReader: NetworkReading {
                    offset + MemoryLayout<if_msghdr2>.size <= length {
                     let info = raw.loadUnaligned(fromByteOffset: offset, as: if_msghdr2.self)
                     if info.ifm_flags & IFF_UP != 0, info.ifm_flags & IFF_LOOPBACK == 0 {
-                        received += info.ifm_data.ifi_ibytes
-                        sent += info.ifm_data.ifi_obytes
+                        var name = [CChar](repeating: 0, count: Int(IF_NAMESIZE))
+                        if if_indextoname(UInt32(info.ifm_index), &name) != nil {
+                            result[name.withUnsafeBufferPointer { String(cString: $0.baseAddress!) }] = NetworkTotals(
+                                receivedBytes: info.ifm_data.ifi_ibytes,
+                                sentBytes: info.ifm_data.ifi_obytes)
+                        }
                     }
                 }
                 offset += Int(header.ifm_msglen)
             }
         }
-        return NetworkTotals(receivedBytes: received, sentBytes: sent)
+        return result
     }
 }

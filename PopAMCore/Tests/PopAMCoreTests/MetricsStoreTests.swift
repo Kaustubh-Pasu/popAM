@@ -26,7 +26,7 @@ final class MetricsStoreTests {
     private func makeStore(batteryPresent: Bool = true) -> MetricsStore {
         let cpuScript = (0..<100).map { i in [ticks(UInt64(i) * 50, 0, UInt64(i) * 50)] }
         let netScript = (0..<100).map { i in
-            Optional(NetworkTotals(receivedBytes: UInt64(i) * 2000, sentBytes: UInt64(i) * 200))
+            Optional(["en0": NetworkTotals(receivedBytes: UInt64(i) * 2000, sentBytes: UInt64(i) * 200)])
         }
         let readers = MetricReaders(
             cpu: FakeCPUReader(cpuScript), topology: nil,
