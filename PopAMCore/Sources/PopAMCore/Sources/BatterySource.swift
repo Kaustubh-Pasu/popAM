@@ -22,6 +22,11 @@ public struct BatterySource {
         }
         return .value(BatterySnapshot(percent: min(100, max(0, percent)), state: state,
                                       minutesRemaining: minutes.flatMap { $0 >= 0 ? $0 : nil },
-                                      cycleCount: raw.cycleCount))
+                                      cycleCount: raw.cycleCount, healthPercent: Self.health(raw)))
+    }
+
+    static func health(_ raw: BatteryRaw) -> Int? {
+        guard let full = raw.rawMaxCapacity, let design = raw.designCapacity, design > 0 else { return nil }
+        return Int((Double(full) / Double(design) * 100).rounded())
     }
 }

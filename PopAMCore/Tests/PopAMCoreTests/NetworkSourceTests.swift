@@ -22,6 +22,18 @@ struct NetworkSourceTests {
         #expect(snap.upBytesPerSec == 200)
     }
 
+    @Test func sinceBootTotalsSumEveryInterface() throws {
+        let reader = FakeNetworkReader([
+            en0(0, 0),
+            ["en0": totals(1000, 100), "en1": totals(5000, 700)],
+        ])
+        var source = NetworkSource(reader: reader)
+        _ = source.sample(at: 0)
+        let snap = try #require(source.sample(at: 1).current)
+        #expect(snap.totalReceivedBytes == 6000)
+        #expect(snap.totalSentBytes == 800)
+    }
+
     @Test func counterDecreaseResets() throws {
         let reader = FakeNetworkReader([en0(5000, 5000), en0(10, 10), en0(30, 50)])
         var source = NetworkSource(reader: reader)

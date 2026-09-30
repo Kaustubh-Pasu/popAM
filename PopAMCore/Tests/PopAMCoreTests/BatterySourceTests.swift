@@ -8,9 +8,11 @@ struct FakeBatteryReader: BatteryReading {
 }
 
 func battery(current: Int = 78, max: Int = 100, charging: Bool = false, charged: Bool = false,
-             onAC: Bool = false, toEmpty: Int = -1, toFull: Int = -1, cycles: Int? = 212) -> BatteryRaw {
+             onAC: Bool = false, toEmpty: Int = -1, toFull: Int = -1, cycles: Int? = 212,
+             rawMax: Int? = 4700, design: Int? = 5000) -> BatteryRaw {
     BatteryRaw(currentCapacity: current, maxCapacity: max, isCharging: charging, isCharged: charged,
-               onAC: onAC, timeToEmpty: toEmpty, timeToFull: toFull, cycleCount: cycles)
+               onAC: onAC, timeToEmpty: toEmpty, timeToFull: toFull, cycleCount: cycles,
+               rawMaxCapacity: rawMax, designCapacity: design)
 }
 
 struct BatterySourceTests {
@@ -57,6 +59,17 @@ struct BatterySourceTests {
     @Test func zeroMaxCapacityDoesNotCrash() throws {
         let snap = try #require(sample(battery(current: 50, max: 0)).current)
         #expect(snap.percent == 0)
+    }
+
+    @Test func healthIsRawMaxOverDesignRounded() throws {
+        #expect(try #require(sample(battery(rawMax: 4700, design: 5000)).current).healthPercent == 94)
+        #expect(try #require(sample(battery(rawMax: 4976, design: 5000)).current).healthPercent == 100)
+    }
+
+    @Test func healthNilWhenCapacityMissing() throws {
+        #expect(try #require(sample(battery(rawMax: nil)).current).healthPercent == nil)
+        #expect(try #require(sample(battery(design: nil)).current).healthPercent == nil)
+        #expect(try #require(sample(battery(design: 0)).current).healthPercent == nil)
     }
 
     @Test func noBattery() {

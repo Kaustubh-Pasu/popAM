@@ -11,7 +11,10 @@ public struct MemorySource {
         let swap = reader.swap() ?? SwapUsage(used: 0, total: 0)
         return .value(MemorySnapshot(usedBytes: min(used, total), totalBytes: total,
                                      pressure: Self.pressure(reader.pressureLevel()),
-                                     swapUsedBytes: swap.used, swapTotalBytes: swap.total))
+                                     swapUsedBytes: swap.used, swapTotalBytes: swap.total,
+                                     appBytes: appPages * vm.pageSize,
+                                     wiredBytes: vm.wiredPages * vm.pageSize,
+                                     compressedBytes: vm.compressedPages * vm.pageSize))
     }
 
     static func pressure(_ level: Int32?) -> MemoryPressure {

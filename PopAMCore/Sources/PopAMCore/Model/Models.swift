@@ -67,14 +67,22 @@ public struct MemorySnapshot: Sendable, Equatable {
     public let pressure: MemoryPressure
     public let swapUsedBytes: UInt64
     public let swapTotalBytes: UInt64
+    /// The three parts of `usedBytes` (before it is capped at `totalBytes`).
+    public let appBytes: UInt64
+    public let wiredBytes: UInt64
+    public let compressedBytes: UInt64
 
     public init(usedBytes: UInt64, totalBytes: UInt64, pressure: MemoryPressure,
-                swapUsedBytes: UInt64, swapTotalBytes: UInt64) {
+                swapUsedBytes: UInt64, swapTotalBytes: UInt64,
+                appBytes: UInt64, wiredBytes: UInt64, compressedBytes: UInt64) {
         self.usedBytes = usedBytes
         self.totalBytes = totalBytes
         self.pressure = pressure
         self.swapUsedBytes = swapUsedBytes
         self.swapTotalBytes = swapTotalBytes
+        self.appBytes = appBytes
+        self.wiredBytes = wiredBytes
+        self.compressedBytes = compressedBytes
     }
 
     public var usedFraction: Double {
@@ -85,10 +93,16 @@ public struct MemorySnapshot: Sendable, Equatable {
 public struct NetworkSnapshot: Sendable, Equatable {
     public let downBytesPerSec: Double
     public let upBytesPerSec: Double
+    /// Cumulative since boot, summed over the interfaces currently up.
+    public let totalReceivedBytes: UInt64
+    public let totalSentBytes: UInt64
 
-    public init(downBytesPerSec: Double, upBytesPerSec: Double) {
+    public init(downBytesPerSec: Double, upBytesPerSec: Double,
+                totalReceivedBytes: UInt64, totalSentBytes: UInt64) {
         self.downBytesPerSec = downBytesPerSec
         self.upBytesPerSec = upBytesPerSec
+        self.totalReceivedBytes = totalReceivedBytes
+        self.totalSentBytes = totalSentBytes
     }
 }
 
@@ -118,12 +132,39 @@ public struct BatterySnapshot: Sendable, Equatable {
     /// nil = "Calculating…" or not applicable.
     public let minutesRemaining: Int?
     public let cycleCount: Int?
+    /// Full-charge capacity as a percent of design capacity; nil when unknown.
+    public let healthPercent: Int?
 
-    public init(percent: Int, state: PowerState, minutesRemaining: Int?, cycleCount: Int?) {
+    public init(percent: Int, state: PowerState, minutesRemaining: Int?, cycleCount: Int?,
+                healthPercent: Int? = nil) {
         self.percent = percent
         self.state = state
         self.minutesRemaining = minutesRemaining
         self.cycleCount = cycleCount
+        self.healthPercent = healthPercent
+    }
+}
+
+public struct LoadAverage: Sendable, Equatable {
+    public let one: Double
+    public let five: Double
+    public let fifteen: Double
+
+    public init(one: Double, five: Double, fifteen: Double) {
+        self.one = one
+        self.five = five
+        self.fifteen = fifteen
+    }
+}
+
+/// Machine-wide info shown in the popover header.
+public struct SystemSnapshot: Sendable, Equatable {
+    public let uptimeSeconds: Double?
+    public let loadAverage: LoadAverage?
+
+    public init(uptimeSeconds: Double?, loadAverage: LoadAverage?) {
+        self.uptimeSeconds = uptimeSeconds
+        self.loadAverage = loadAverage
     }
 }
 
@@ -134,6 +175,7 @@ public struct Snapshots: Sendable, Equatable {
     public var network: Reading<NetworkSnapshot> = .unavailable
     public var disk: Reading<DiskSnapshot> = .unavailable
     public var battery: Reading<BatterySnapshot> = .unavailable
+    public var system: Reading<SystemSnapshot> = .unavailable
 
     public init() {}
 }

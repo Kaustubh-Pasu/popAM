@@ -12,6 +12,10 @@ public struct History: Sendable, Equatable {
 
     public init() {}
 
+    /// Highest value in the current window, nil when empty.
+    public var cpuPeak: Double? { cpu.max() }
+    public var netDownPeak: Double? { netDown.max() }
+
     mutating func push(_ value: Double, to series: Series) {
         switch series {
         case .cpu: Self.append(value, to: &cpu)

@@ -31,6 +31,8 @@ public struct NetworkSource {
         guard contributing > 0 else { return .unavailable }
         let elapsed = time - last.time
         return .value(NetworkSnapshot(downBytesPerSec: Double(down) / elapsed,
-                                      upBytesPerSec: Double(up) / elapsed))
+                                      upBytesPerSec: Double(up) / elapsed,
+                                      totalReceivedBytes: totals.values.reduce(0) { $0 &+ $1.receivedBytes },
+                                      totalSentBytes: totals.values.reduce(0) { $0 &+ $1.sentBytes }))
     }
 }

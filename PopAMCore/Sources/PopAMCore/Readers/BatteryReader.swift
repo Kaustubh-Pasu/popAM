@@ -12,9 +12,13 @@ public struct BatteryRaw: Sendable, Equatable {
     public let timeToEmpty: Int
     public let timeToFull: Int
     public let cycleCount: Int?
+    /// mAh, from AppleSmartBattery; nil when the registry lacks them.
+    public let rawMaxCapacity: Int?
+    public let designCapacity: Int?
 
     public init(currentCapacity: Int, maxCapacity: Int, isCharging: Bool, isCharged: Bool, onAC: Bool,
-                timeToEmpty: Int, timeToFull: Int, cycleCount: Int?) {
+                timeToEmpty: Int, timeToFull: Int, cycleCount: Int?,
+                rawMaxCapacity: Int?, designCapacity: Int?) {
         self.currentCapacity = currentCapacity
         self.maxCapacity = maxCapacity
         self.isCharging = isCharging
@@ -23,6 +27,8 @@ public struct BatteryRaw: Sendable, Equatable {
         self.timeToEmpty = timeToEmpty
         self.timeToFull = timeToFull
         self.cycleCount = cycleCount
+        self.rawMaxCapacity = rawMaxCapacity
+        self.designCapacity = designCapacity
     }
 }
 
@@ -49,7 +55,9 @@ public struct LiveBatteryReader: BatteryReading {
             onAC: (desc[kIOPSPowerSourceStateKey] as? String) == kIOPSACPowerValue,
             timeToEmpty: desc[kIOPSTimeToEmptyKey] as? Int ?? -1,
             timeToFull: desc[kIOPSTimeToFullChargeKey] as? Int ?? -1,
-            cycleCount: Self.cycleCount())
+            cycleCount: Self.smartBattery("CycleCount"),
+            rawMaxCapacity: Self.smartBattery("AppleRawMaxCapacity"),
+            designCapacity: Self.smartBattery("DesignCapacity"))
     }
 
     private static func internalBattery() -> [String: Any]? {
@@ -65,11 +73,11 @@ public struct LiveBatteryReader: BatteryReading {
         return nil
     }
 
-    private static func cycleCount() -> Int? {
+    private static func smartBattery(_ key: String) -> Int? {
         let service = IOServiceGetMatchingService(kIOMainPortDefault, IOServiceMatching("AppleSmartBattery"))
         guard service != 0 else { return nil }
         defer { IOObjectRelease(service) }
-        return IORegistryEntryCreateCFProperty(service, "CycleCount" as CFString, kCFAllocatorDefault, 0)?
+        return IORegistryEntryCreateCFProperty(service, key as CFString, kCFAllocatorDefault, 0)?
             .takeRetainedValue() as? Int
     }
 }

@@ -27,6 +27,16 @@ struct MemorySourceTests {
         #expect(snap.swapTotalBytes == 10)
     }
 
+    @Test func exposesAppWiredCompressedBreakdown() throws {
+        var reader = FakeMemoryReader()
+        reader.stats = VMStats(internalPages: 1000, purgeablePages: 200, wiredPages: 300,
+                               compressedPages: 100, pageSize: 16384)
+        let snap = try #require(MemorySource(reader: reader).sample().current)
+        #expect(snap.appBytes == 800 * 16384)
+        #expect(snap.wiredBytes == 300 * 16384)
+        #expect(snap.compressedBytes == 100 * 16384)
+    }
+
     @Test func purgeableLargerThanInternalDoesNotUnderflow() throws {
         var reader = FakeMemoryReader()
         reader.stats = VMStats(internalPages: 10, purgeablePages: 50, wiredPages: 1,

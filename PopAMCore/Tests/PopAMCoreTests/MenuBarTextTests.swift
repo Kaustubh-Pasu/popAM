@@ -7,7 +7,8 @@ struct MenuBarTextTests {
         s.cpu = .value(CPUSnapshot(total: 0.23, user: 0.15, system: 0.08, cores: []))
         s.memory = .value(MemorySnapshot(usedBytes: UInt64(8.1 * 1024 * 1024 * 1024),
                                          totalBytes: 16 * 1024 * 1024 * 1024, pressure: .normal,
-                                         swapUsedBytes: 0, swapTotalBytes: 0))
+                                         swapUsedBytes: 0, swapTotalBytes: 0,
+                                         appBytes: 0, wiredBytes: 0, compressedBytes: 0))
         #expect(MenuBarText.make([.cpuPercent, .ramUsed], from: s) == "23% · 8.1G")
     }
 
@@ -17,7 +18,8 @@ struct MenuBarTextTests {
 
     @Test func networkAndDiskAndBattery() {
         var s = Snapshots()
-        s.network = .value(NetworkSnapshot(downBytesPerSec: 2_400_000, upBytesPerSec: 120_000))
+        s.network = .value(NetworkSnapshot(downBytesPerSec: 2_400_000, upBytesPerSec: 120_000,
+                                           totalReceivedBytes: 0, totalSentBytes: 0))
         s.disk = .value(DiskSnapshot(freeBytes: 212_000_000_000, totalBytes: 494_000_000_000,
                                      readBytesPerSec: nil, writeBytesPerSec: nil))
         s.battery = .value(BatterySnapshot(percent: 78, state: .charging, minutesRemaining: nil, cycleCount: nil))
