@@ -13,16 +13,16 @@ Requires macOS 14 (Sonoma) or later.
 ## Build and run
 
 ```bash
-brew install xcodegen          # one time
-git clone <this repo> && cd activity-monitor-popup
-xcodegen generate              # only needed after editing project.yml
+git clone https://github.com/Kaustubh-Pasu/popAM.git && cd popAM
 open PopAM.xcodeproj           # then press ⌘R
 ```
+
+The Xcode project is generated from `project.yml` with [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`); you only need it if you edit `project.yml`, then run `xcodegen generate`.
 
 Or from the terminal:
 
 ```bash
-xcodebuild -project PopAM.xcodeproj -scheme PopAM -configuration Release -derivedDataPath build build
+xcodebuild -project PopAM.xcodeproj -scheme PopAM -configuration Release -destination 'generic/platform=macOS' -derivedDataPath build build
 cp -R build/Build/Products/Release/popAM.app /Applications/
 ```
 
