@@ -1,0 +1,73 @@
+import Foundation
+import IOKit
+import IOKit.ps
+
+public struct BatteryRaw: Sendable, Equatable {
+    public let currentCapacity: Int
+    public let maxCapacity: Int
+    public let isCharging: Bool
+    public let isCharged: Bool
+    public let onAC: Bool
+    /// Minutes; -1 while macOS is still estimating.
+    public let timeToEmpty: Int
+    public let timeToFull: Int
+    public let cycleCount: Int?
+
+    public init(currentCapacity: Int, maxCapacity: Int, isCharging: Bool, isCharged: Bool, onAC: Bool,
+                timeToEmpty: Int, timeToFull: Int, cycleCount: Int?) {
+        self.currentCapacity = currentCapacity
+        self.maxCapacity = maxCapacity
+        self.isCharging = isCharging
+        self.isCharged = isCharged
+        self.onAC = onAC
+        self.timeToEmpty = timeToEmpty
+        self.timeToFull = timeToFull
+        self.cycleCount = cycleCount
+    }
+}
+
+public protocol BatteryReading {
+    /// Whether this Mac has an internal battery. Checked once; drives hiding the Battery UI.
+    var isPresent: Bool { get }
+    func read() -> BatteryRaw?
+}
+
+public struct LiveBatteryReader: BatteryReading {
+    public let isPresent: Bool
+
+    public init() {
+        isPresent = Self.internalBattery() != nil
+    }
+
+    public func read() -> BatteryRaw? {
+        guard let desc = Self.internalBattery() else { return nil }
+        return BatteryRaw(
+            currentCapacity: desc[kIOPSCurrentCapacityKey] as? Int ?? 0,
+            maxCapacity: desc[kIOPSMaxCapacityKey] as? Int ?? 100,
+            isCharging: desc[kIOPSIsChargingKey] as? Bool ?? false,
+            isCharged: desc[kIOPSIsChargedKey] as? Bool ?? false,
+            onAC: (desc[kIOPSPowerSourceStateKey] as? String) == kIOPSACPowerValue,
+            timeToEmpty: desc[kIOPSTimeToEmptyKey] as? Int ?? -1,
+            timeToFull: desc[kIOPSTimeToFullChargeKey] as? Int ?? -1,
+            cycleCount: Self.cycleCount())
+    }
+
+    private static func internalBattery() -> [String: Any]? {
+        let info = IOPSCopyPowerSourcesInfo().takeRetainedValue()
+        let list = IOPSCopyPowerSourcesList(info).takeRetainedValue() as [CFTypeRef]
+        for source in list {
+            guard let desc = IOPSGetPowerSourceDescription(info, source)?
+                .takeUnretainedValue() as? [String: Any] else { continue }
+            if desc[kIOPSTypeKey] as? String == kIOPSInternalBatteryType { return desc }
+        }
+        return nil
+    }
+
+    private static func cycleCount() -> Int? {
+        let service = IOServiceGetMatchingService(kIOMainPortDefault, IOServiceMatching("AppleSmartBattery"))
+        guard service != 0 else { return nil }
+        defer { IOObjectRelease(service) }
+        return IORegistryEntryCreateCFProperty(service, "CycleCount" as CFString, kCFAllocatorDefault, 0)?
+            .takeRetainedValue() as? Int
+    }
+}
