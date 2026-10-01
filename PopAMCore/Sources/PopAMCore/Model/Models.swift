@@ -145,6 +145,32 @@ public struct BatterySnapshot: Sendable, Equatable {
     }
 }
 
+/// Where power is going right now, in watts.
+public struct PowerSnapshot: Sendable, Equatable {
+    /// 0 while on battery.
+    public let adapterW: Double?
+    public let systemW: Double?
+    /// + charging, − discharging; nil when there is no battery.
+    public let batteryW: Double?
+    /// Adapter power not reaching the system or battery; nil on battery or when unknown.
+    public let lossW: Double?
+    public let batteryTempC: Double?
+    /// Charger rating; nil while on battery.
+    public let chargerRatingW: Int?
+    public let onAC: Bool
+
+    public init(adapterW: Double?, systemW: Double?, batteryW: Double?, lossW: Double?,
+                batteryTempC: Double?, chargerRatingW: Int?, onAC: Bool) {
+        self.adapterW = adapterW
+        self.systemW = systemW
+        self.batteryW = batteryW
+        self.lossW = lossW
+        self.batteryTempC = batteryTempC
+        self.chargerRatingW = chargerRatingW
+        self.onAC = onAC
+    }
+}
+
 public struct LoadAverage: Sendable, Equatable {
     public let one: Double
     public let five: Double
