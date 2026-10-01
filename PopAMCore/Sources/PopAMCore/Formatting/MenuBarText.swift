@@ -21,6 +21,8 @@ public enum MenuBarText {
             return s.disk.current.map { Formatters.compactBytes(Double($0.freeBytes), base: 1000) } ?? dash
         case .batteryPercent:
             return s.battery.current.map { "\($0.percent)%" } ?? dash
+        case .systemWatts:
+            return s.power.current?.systemW.map { "\(Int($0.rounded()))W" } ?? dash
         }
     }
 }

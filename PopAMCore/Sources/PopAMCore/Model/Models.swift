@@ -1,7 +1,7 @@
 import Foundation
 
 public enum MetricKind: String, CaseIterable, Codable, Sendable {
-    case cpu, memory, network, disk, battery
+    case cpu, memory, network, disk, battery, power
 
     public var title: String {
         switch self {
@@ -10,6 +10,7 @@ public enum MetricKind: String, CaseIterable, Codable, Sendable {
         case .network: "Network"
         case .disk: "Disk"
         case .battery: "Battery"
+        case .power: "Power"
         }
     }
 }
@@ -201,6 +202,7 @@ public struct Snapshots: Sendable, Equatable {
     public var network: Reading<NetworkSnapshot> = .unavailable
     public var disk: Reading<DiskSnapshot> = .unavailable
     public var battery: Reading<BatterySnapshot> = .unavailable
+    public var power: Reading<PowerSnapshot> = .unavailable
     public var system: Reading<SystemSnapshot> = .unavailable
 
     public init() {}

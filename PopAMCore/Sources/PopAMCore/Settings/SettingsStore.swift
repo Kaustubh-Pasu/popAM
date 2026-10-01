@@ -6,7 +6,7 @@ public enum MenuBarMode: String, Codable, CaseIterable, Sendable {
 }
 
 public enum MenuBarValue: String, Codable, CaseIterable, Sendable {
-    case cpuPercent, ramUsed, ramPercent, netDown, netUp, diskFree, batteryPercent
+    case cpuPercent, ramUsed, ramPercent, netDown, netUp, diskFree, batteryPercent, systemWatts
 
     public var metric: MetricKind {
         switch self {
@@ -15,6 +15,7 @@ public enum MenuBarValue: String, Codable, CaseIterable, Sendable {
         case .netDown, .netUp: .network
         case .diskFree: .disk
         case .batteryPercent: .battery
+        case .systemWatts: .power
         }
     }
 
@@ -27,6 +28,7 @@ public enum MenuBarValue: String, Codable, CaseIterable, Sendable {
         case .netUp: "Net ↑"
         case .diskFree: "Disk free"
         case .batteryPercent: "Battery %"
+        case .systemWatts: "System W"
         }
     }
 }

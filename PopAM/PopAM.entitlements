@@ -4,5 +4,10 @@
 <dict>
 	<key>com.apple.security.app-sandbox</key>
 	<true/>
+	<!-- Live power rails and battery temperature come from the SMC; read-only use. -->
+	<key>com.apple.security.temporary-exception.iokit-user-client-class</key>
+	<array>
+		<string>AppleSMCClient</string>
+	</array>
 </dict>
 </plist>

@@ -23,7 +23,7 @@ final class SettingsStoreTests {
         #expect(settings.refreshInterval == 2)
         #expect(settings.menuBarMode == .iconOnly)
         #expect(settings.menuBarValues == [.cpuPercent, .ramUsed])
-        #expect(settings.cardOrder == [.cpu, .memory, .network, .disk, .battery])
+        #expect(settings.cardOrder == [.cpu, .memory, .network, .disk, .battery, .power])
         #expect(settings.enabledCards == [])
     }
 
@@ -43,7 +43,7 @@ final class SettingsStoreTests {
         #expect(second.menuBarMode == .iconAndText)
         #expect(second.menuBarValues == [.netDown])
         #expect(second.enabledCards == [.cpu, .network])
-        #expect(second.cardOrder == [.battery, .cpu, .memory, .network, .disk])
+        #expect(second.cardOrder == [.battery, .cpu, .memory, .network, .disk, .power])
     }
 
     @Test func menuBarValuesCappedAtTwoAndDeduplicated() {
@@ -58,7 +58,7 @@ final class SettingsStoreTests {
         defaults.set(7.0, forKey: "refreshInterval")
         let settings = SettingsStore(defaults: defaults)
         #expect(settings.menuBarMode == .iconOnly)
-        #expect(settings.cardOrder == [.cpu, .memory, .network, .disk, .battery])
+        #expect(settings.cardOrder == [.cpu, .memory, .network, .disk, .battery, .power])
         #expect(settings.refreshInterval == 2)
     }
 
@@ -78,7 +78,7 @@ final class SettingsStoreTests {
         #expect(settings.refreshInterval == 2)
         #expect(settings.menuBarMode == .iconOnly)
         #expect(settings.menuBarValues == [.cpuPercent, .ramUsed])
-        #expect(settings.cardOrder == [.cpu, .memory, .network, .disk, .battery])
+        #expect(settings.cardOrder == [.cpu, .memory, .network, .disk, .battery, .power])
         #expect(settings.enabledCards == [])
     }
 
@@ -89,7 +89,7 @@ final class SettingsStoreTests {
         defaults.set(Data(), forKey: "menuBarMode")
         let settings = SettingsStore(defaults: defaults)
         #expect(settings.menuBarValues == [.cpuPercent, .ramUsed])
-        #expect(settings.cardOrder == [.cpu, .memory, .network, .disk, .battery])
+        #expect(settings.cardOrder == [.cpu, .memory, .network, .disk, .battery, .power])
         #expect(settings.enabledCards == [])
         #expect(settings.menuBarMode == .iconOnly)
     }
@@ -101,7 +101,7 @@ final class SettingsStoreTests {
         defaults.set(try JSONEncoder().encode(order), forKey: "cardOrder")
         let settings = SettingsStore(defaults: defaults)
         #expect(settings.menuBarValues == [.netUp, .cpuPercent])
-        #expect(settings.cardOrder == [.disk, .cpu, .memory, .network, .battery])
+        #expect(settings.cardOrder == [.disk, .cpu, .memory, .network, .battery, .power])
     }
 
     @Test func emptyStoredListsAreKept() throws {
@@ -115,28 +115,36 @@ final class SettingsStoreTests {
 
     @Test func storedOrderMissingKindsGetsThemAppended() {
         #expect(SettingsStore.normalizedOrder([.disk, .cpu, .disk])
-                == [.disk, .cpu, .memory, .network, .battery])
+                == [.disk, .cpu, .memory, .network, .battery, .power])
     }
 
     @Test func visibleCardsFollowOrderAndEnabled() {
         let settings = SettingsStore(defaults: defaults)
         for kind in MetricKind.allCases where kind != .memory { settings.setCardEnabled(kind, true) }
         settings.moveCards(fromOffsets: IndexSet(integer: 3), toOffset: 0)
-        #expect(settings.visibleCards == [.disk, .cpu, .network, .battery])
+        #expect(settings.visibleCards == [.disk, .cpu, .network, .battery, .power])
     }
 
     @Test func moveDownMatchesSwiftUISemantics() {
         let settings = SettingsStore(defaults: defaults)
         settings.moveCards(fromOffsets: IndexSet(integer: 0), toOffset: 3)
-        #expect(settings.cardOrder == [.memory, .network, .cpu, .disk, .battery])
+        #expect(settings.cardOrder == [.memory, .network, .cpu, .disk, .battery, .power])
     }
 
     @Test func moveWithHiddenBatteryMapsIndices() {
         let settings = SettingsStore(defaults: defaults)
         settings.moveCards(fromOffsets: IndexSet(integer: 4), toOffset: 1)   // battery → 2nd
-        #expect(settings.cardOrder == [.cpu, .battery, .memory, .network, .disk])
+        #expect(settings.cardOrder == [.cpu, .battery, .memory, .network, .disk, .power])
         let shown: [MetricKind] = [.cpu, .memory, .network, .disk]          // UI hides battery
         settings.moveCards(shown: shown, fromOffsets: IndexSet(integer: 3), toOffset: 1) // disk → before memory
-        #expect(settings.cardOrder == [.cpu, .battery, .disk, .memory, .network])
+        #expect(settings.cardOrder == [.cpu, .battery, .disk, .memory, .network, .power])
+    }
+    @Test func upgradeAppendsPowerDisabled() throws {
+        let legacy: [MetricKind] = [.battery, .cpu, .memory, .network, .disk]
+        defaults.set(try JSONEncoder().encode(legacy), forKey: "cardOrder")
+        defaults.set(try JSONEncoder().encode(Set<MetricKind>([.cpu])), forKey: "enabledCards")
+        let settings = SettingsStore(defaults: defaults)
+        #expect(settings.cardOrder == legacy + [.power])
+        #expect(!settings.enabledCards.contains(.power))
     }
 }
