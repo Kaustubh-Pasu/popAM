@@ -68,7 +68,7 @@ public final class SettingsStore {
             Self.load([MenuBarValue].self, Key.menuBarValues, from: defaults) ?? [.cpuPercent, .ramUsed])
         cardOrder = Self.normalizedOrder(Self.load([MetricKind].self, Key.cardOrder, from: defaults) ?? [])
         enabledCards = Self.load(Set<MetricKind>.self, Key.enabledCards, from: defaults)
-            ?? Set(MetricKind.allCases)
+            ?? []
     }
 
     // MARK: Mutations

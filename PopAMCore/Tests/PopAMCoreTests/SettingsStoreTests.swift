@@ -24,7 +24,7 @@ final class SettingsStoreTests {
         #expect(settings.menuBarMode == .iconOnly)
         #expect(settings.menuBarValues == [.cpuPercent, .ramUsed])
         #expect(settings.cardOrder == [.cpu, .memory, .network, .disk, .battery])
-        #expect(settings.enabledCards == Set(MetricKind.allCases))
+        #expect(settings.enabledCards == [])
     }
 
     @Test func persistsAcrossInstances() {
@@ -32,14 +32,17 @@ final class SettingsStoreTests {
         first.refreshInterval = 5
         first.menuBarMode = .iconAndText
         first.setMenuBarValues([.netDown])
+        first.setCardEnabled(.cpu, true)
+        first.setCardEnabled(.disk, true)
         first.setCardEnabled(.disk, false)
+        first.setCardEnabled(.network, true)
         first.moveCards(fromOffsets: IndexSet(integer: 4), toOffset: 0)
 
         let second = SettingsStore(defaults: defaults)
         #expect(second.refreshInterval == 5)
         #expect(second.menuBarMode == .iconAndText)
         #expect(second.menuBarValues == [.netDown])
-        #expect(second.enabledCards == [.cpu, .memory, .network, .battery])
+        #expect(second.enabledCards == [.cpu, .network])
         #expect(second.cardOrder == [.battery, .cpu, .memory, .network, .disk])
     }
 
@@ -76,7 +79,7 @@ final class SettingsStoreTests {
         #expect(settings.menuBarMode == .iconOnly)
         #expect(settings.menuBarValues == [.cpuPercent, .ramUsed])
         #expect(settings.cardOrder == [.cpu, .memory, .network, .disk, .battery])
-        #expect(settings.enabledCards == Set(MetricKind.allCases))
+        #expect(settings.enabledCards == [])
     }
 
     @Test func wellFormedJSONOfTheWrongShapeFallsBackToDefaults() {
@@ -87,7 +90,7 @@ final class SettingsStoreTests {
         let settings = SettingsStore(defaults: defaults)
         #expect(settings.menuBarValues == [.cpuPercent, .ramUsed])
         #expect(settings.cardOrder == [.cpu, .memory, .network, .disk, .battery])
-        #expect(settings.enabledCards == Set(MetricKind.allCases))
+        #expect(settings.enabledCards == [])
         #expect(settings.menuBarMode == .iconOnly)
     }
 
@@ -117,7 +120,7 @@ final class SettingsStoreTests {
 
     @Test func visibleCardsFollowOrderAndEnabled() {
         let settings = SettingsStore(defaults: defaults)
-        settings.setCardEnabled(.memory, false)
+        for kind in MetricKind.allCases where kind != .memory { settings.setCardEnabled(kind, true) }
         settings.moveCards(fromOffsets: IndexSet(integer: 3), toOffset: 0)
         #expect(settings.visibleCards == [.disk, .cpu, .network, .battery])
     }

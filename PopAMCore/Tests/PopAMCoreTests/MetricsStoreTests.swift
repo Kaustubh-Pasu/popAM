@@ -20,6 +20,8 @@ final class MetricsStoreTests {
     init() {
         let defaults = UserDefaults(suiteName: suite)!
         settings = SettingsStore(defaults: defaults)
+        // Cards start disabled on first launch; these tests exercise sampling, so turn them all on.
+        for kind in MetricKind.allCases { settings.setCardEnabled(kind, true) }
     }
 
     /// CPU ticks rise by 50 busy / 50 idle every sample → 50%.
