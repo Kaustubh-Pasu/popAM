@@ -11,7 +11,7 @@ struct PopupTab: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Drag to reorder. Turn off cards you don't need.")
+            Text("Turn on the cards you want in the popup. Drag to reorder.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
             List {
