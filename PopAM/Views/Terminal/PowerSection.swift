@@ -3,6 +3,7 @@ import SwiftUI
 
 struct PowerSection: View {
     let reading: Reading<PowerSnapshot>
+    let unit: TemperatureUnit
 
     var body: some View {
         let power = reading.current
@@ -23,7 +24,7 @@ struct PowerSection: View {
                 .font(Term.mono(10.5))
                 .foregroundStyle(Term.ink.opacity(0.85))
                 let charger = PowerFlowText.charger(power)
-                let temperature = PowerFlowText.temperature(power)
+                let temperature = PowerFlowText.temperature(power, unit: unit)
                 if charger != nil || temperature != nil {
                     TermLine(charger ?? "", temperature ?? "")
                 }

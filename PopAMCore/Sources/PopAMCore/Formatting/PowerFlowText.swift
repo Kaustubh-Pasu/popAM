@@ -47,9 +47,9 @@ public enum PowerFlowText {
         return "charger \(rating)W · max \(Int(max.rounded()))W"
     }
 
-    /// "bat 31°C".
-    public static func temperature(_ s: PowerSnapshot) -> String? {
-        s.batteryTempC.map { "bat \(Int($0.rounded()))°C" }
+    /// "bat 31°C" or "bat 88°F".
+    public static func temperature(_ s: PowerSnapshot, unit: TemperatureUnit) -> String? {
+        s.batteryTempC.map { "bat \(Int(unit.convert(celsius: $0).rounded()))\(unit.symbol)" }
     }
 
     private static func isOnBattery(_ s: PowerSnapshot) -> Bool { !s.onAC }

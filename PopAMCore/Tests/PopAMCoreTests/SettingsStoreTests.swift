@@ -147,4 +147,20 @@ final class SettingsStoreTests {
         #expect(settings.cardOrder == legacy + [.power])
         #expect(!settings.enabledCards.contains(.power))
     }
+
+    @Test func temperatureUnitDefaultsToRegion() {
+        #expect(SettingsStore(defaults: defaults, locale: Locale(identifier: "en_US")).temperatureUnit == .fahrenheit)
+        #expect(SettingsStore(defaults: defaults, locale: Locale(identifier: "de_DE")).temperatureUnit == .celsius)
+        #expect(SettingsStore(defaults: defaults, locale: Locale(identifier: "en_GB")).temperatureUnit == .celsius)
+    }
+
+    @Test func temperatureUnitChoiceOverridesRegion() {
+        SettingsStore(defaults: defaults, locale: Locale(identifier: "de_DE")).temperatureUnit = .fahrenheit
+        #expect(SettingsStore(defaults: defaults, locale: Locale(identifier: "de_DE")).temperatureUnit == .fahrenheit)
+    }
+
+    @Test func corruptTemperatureUnitFallsBackToRegion() {
+        defaults.set(Data("\"kelvin\"".utf8), forKey: "temperatureUnit")
+        #expect(SettingsStore(defaults: defaults, locale: Locale(identifier: "en_US")).temperatureUnit == .fahrenheit)
+    }
 }

@@ -67,9 +67,9 @@ struct PowerFlowTextTests {
 
     @Test func footerParts() {
         #expect(PowerFlowText.charger(snap()) == "charger 96W")
-        #expect(PowerFlowText.temperature(snap()) == "bat 31°C")
+        #expect(PowerFlowText.temperature(snap(), unit: .celsius) == "bat 31°C")
         #expect(PowerFlowText.charger(snap(rating: nil)) == nil)
-        #expect(PowerFlowText.temperature(snap(temp: nil)) == nil)
+        #expect(PowerFlowText.temperature(snap(temp: nil), unit: .celsius) == nil)
     }
 
     @Test func chargerShowsMacMaxInput() {
@@ -80,5 +80,10 @@ struct PowerFlowTextTests {
         let s = snap(adapter: 0, system: 12.3, battery: nil, loss: nil, rating: nil, onAC: false)
         #expect(PowerFlowText.header(s) == "— out")
         #expect(PowerFlowText.lines(s) == ["battery — ━━━━━ system    12.3W"])
+    }
+
+    @Test func temperatureInFahrenheit() {
+        #expect(PowerFlowText.temperature(snap(temp: 29), unit: .fahrenheit) == "bat 84°F")
+        #expect(PowerFlowText.temperature(snap(temp: -20), unit: .fahrenheit) == "bat -4°F")
     }
 }

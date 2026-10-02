@@ -25,6 +25,12 @@ struct GeneralTab: View {
                 }
             }
             .pickerStyle(.segmented)
+            Picker("Temperature", selection: $settings.temperatureUnit) {
+                ForEach(TemperatureUnit.allCases, id: \.self) { unit in
+                    Text(unit.symbol).tag(unit)
+                }
+            }
+            .pickerStyle(.segmented)
         }
         .formStyle(.grouped)
         .onAppear { launchAtLogin.refresh() }
