@@ -11,9 +11,11 @@ final class FakePowerReader: PowerReading {
 
 /// Defaults: charging on a 96 W charger — 34.2 W in, 18.1 W system, 12.5 V × 1.168 A = +14.6 W battery.
 func power(adapter: Double? = 34.2, system: Double? = 18.1, mV: Int? = 12_500, mA: Int? = 1_168,
-           temp: Double? = 31, rating: Int? = 96, onAC: Bool = true) -> PowerRaw {
+           temp: Double? = 31, rating: Int? = 96, onAC: Bool = true,
+           smcBattery: Double? = nil, maxInput: Double? = nil) -> PowerRaw {
     PowerRaw(adapterW: adapter, systemW: system, batteryVoltageMV: mV, batteryAmperageMA: mA,
-             batteryTempC: temp, chargerRatingW: rating, onAC: onAC)
+             batteryTempC: temp, chargerRatingW: rating, onAC: onAC,
+             smcBatteryW: smcBattery, maxInputW: maxInput)
 }
 
 private func isClose(_ value: Double?, _ expected: Double) -> Bool {
@@ -112,5 +114,36 @@ struct PowerSourceTests {
         let reader = FakePowerReader()
         PowerSource(reader: reader).reset()
         #expect(reader.resets == 1)
+    }
+
+    @Test func smcBatteryPowerPreferredOverRegistry() throws {
+        let snap = try #require(sample(power(mA: 0, smcBattery: 14.2)).current)
+        #expect(snap.batteryW == 14.2)
+    }
+
+    /// Unplugged, the AppleSmartBattery registry froze at 0 mA while the SMC kept reporting.
+    @Test func unpluggedWithFrozenRegistryUsesSMCBattery() throws {
+        let snap = try #require(sample(power(adapter: 0.003, system: 5.144, mA: 0, rating: 100, onAC: false,
+                                             smcBattery: -5.14)).current)
+        #expect(snap.batteryW == -5.14)
+        #expect(snap.systemW == 5.144)
+    }
+
+    @Test func unpluggedWithoutBatteryReadingUsesSystemLoad() throws {
+        let snap = try #require(sample(power(system: 4.4, mV: nil, mA: nil, onAC: false)).current)
+        #expect(snap.batteryW == -4.4)
+    }
+
+    @Test func maxInputCapsAdapterReadings() throws {
+        let ok = try #require(sample(power(adapter: 95, system: 80, mA: 0, maxInput: 89.2)).current)
+        #expect(ok.adapterW == 95)            // within the 10% margin
+        #expect(ok.maxInputW == 89.2)
+        let bad = try #require(sample(power(adapter: 120, system: 80, mA: 0, maxInput: 89.2)).current)
+        #expect(bad.adapterW == nil)
+    }
+
+    @Test func bogusChargerRatingIsNil() throws {
+        #expect(try #require(sample(power(rating: 65_535)).current).chargerRatingW == nil)
+        #expect(try #require(sample(power(rating: 240)).current).chargerRatingW == 240)
     }
 }

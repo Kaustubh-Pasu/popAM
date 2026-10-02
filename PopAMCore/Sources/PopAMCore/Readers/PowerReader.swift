@@ -18,9 +18,15 @@ public struct PowerRaw: Sendable, Equatable {
     /// AppleSmartBattery `AdapterDetails.Watts`; stale after unplugging.
     public let chargerRatingW: Int?
     public let onAC: Bool
+    /// SMC battery power (`B0AP`, or `B0AV` × `B0AC`): + charging, − discharging. Stays live
+    /// unplugged, when the registry's `InstantAmperage` can freeze at 0.
+    public let smcBatteryW: Double?
+    /// The most this Mac accepts from a charger (`PowerDistribution.IPDInputPower`); last value seen on AC.
+    public let maxInputW: Double?
 
     public init(adapterW: Double?, systemW: Double?, batteryVoltageMV: Int?, batteryAmperageMA: Int?,
-                batteryTempC: Double?, chargerRatingW: Int?, onAC: Bool) {
+                batteryTempC: Double?, chargerRatingW: Int?, onAC: Bool,
+                smcBatteryW: Double? = nil, maxInputW: Double? = nil) {
         self.adapterW = adapterW
         self.systemW = systemW
         self.batteryVoltageMV = batteryVoltageMV
@@ -28,6 +34,8 @@ public struct PowerRaw: Sendable, Equatable {
         self.batteryTempC = batteryTempC
         self.chargerRatingW = chargerRatingW
         self.onAC = onAC
+        self.smcBatteryW = smcBatteryW
+        self.maxInputW = maxInputW
     }
 }
 
@@ -40,14 +48,17 @@ public protocol PowerReading {
 /// SMC rails and battery temperature plus AppleSmartBattery voltage, current and charger rating.
 public final class LivePowerReader: PowerReading {
     private let smc: any SMCReading
+    private var lastMaxInputW: Double?
 
     public convenience init() { self.init(smc: LiveSMCReader()) }
 
     init(smc: any SMCReading) { self.smc = smc }
 
     public func read() -> PowerRaw {
-        let battery = Self.smartBattery(["Voltage", "InstantAmperage", "AdapterDetails"])
+        let battery = Self.smartBattery(["Voltage", "InstantAmperage", "AdapterDetails", "PowerDistribution"])
         let adapter = battery["AdapterDetails"] as? [String: Any]
+        lastMaxInputW = Self.remember(Self.maxInput(battery["PowerDistribution"] as? [String: Any]),
+                                      last: lastMaxInputW)
         return PowerRaw(
             adapterW: smc.read("PDTR"),
             systemW: smc.read("PSTR"),
@@ -55,8 +66,25 @@ public final class LivePowerReader: PowerReading {
             batteryAmperageMA: Self.int64(battery["InstantAmperage"]).map { Int($0) },
             batteryTempC: smc.read("TB0T"),
             chargerRatingW: Self.int64(adapter?["Watts"]).map { Int($0) },
-            onAC: Self.onAC())
+            onAC: Self.onAC(),
+            smcBatteryW: smcBatteryWatts(),
+            maxInputW: lastMaxInputW)
     }
+
+    private func smcBatteryWatts() -> Double? {
+        if let milliwatts = smc.read("B0AP") { return milliwatts / 1000 }
+        guard let millivolts = smc.read("B0AV"), let milliamps = smc.read("B0AC") else { return nil }
+        return millivolts * milliamps / 1_000_000
+    }
+
+    /// Watts from `PowerDistribution.IPDInputPower` (mW); 0 while unplugged, so nil then.
+    static func maxInput(_ distribution: [String: Any]?) -> Double? {
+        guard let milliwatts = int64(distribution?["IPDInputPower"]), milliwatts > 0 else { return nil }
+        return Double(milliwatts) / 1000
+    }
+
+    /// Keeps the last known max input across unplugged samples.
+    static func remember(_ value: Double?, last: Double?) -> Double? { value ?? last }
 
     public func reset() { smc.reopen() }
 

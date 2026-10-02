@@ -51,23 +51,28 @@ enum SMCDecode {
         String(decoding: [24, 16, 8, 0].map { UInt8(truncatingIfNeeded: code >> $0) }, as: UTF8.self)
     }
 
-    /// `flt ` is little-endian on Apple silicon; the integer and fixed-point types are big-endian.
+    /// Apple silicon stores every SMC value little-endian (verified on an M5 against registry values).
     static func value(type: String, bytes: [UInt8]) -> Double? {
         switch type {
         case "flt " where bytes.count >= 4:
-            let bits = UInt32(bytes[0]) | UInt32(bytes[1]) << 8 | UInt32(bytes[2]) << 16 | UInt32(bytes[3]) << 24
-            return Double(Float(bitPattern: bits))
-        case "sp78" where bytes.count >= 2:
-            return Double(Int16(bitPattern: UInt16(bytes[0]) << 8 | UInt16(bytes[1]))) / 256
+            return Double(Float(bitPattern: littleEndian(bytes, 4)))
         case "ui8 " where bytes.count >= 1:
             return Double(bytes[0])
         case "ui16" where bytes.count >= 2:
-            return Double(UInt16(bytes[0]) << 8 | UInt16(bytes[1]))
+            return Double(UInt16(littleEndian(bytes, 2)))
         case "ui32" where bytes.count >= 4:
-            return Double(bytes.prefix(4).reduce(UInt32(0)) { $0 << 8 | UInt32($1) })
+            return Double(littleEndian(bytes, 4))
+        case "si16" where bytes.count >= 2:
+            return Double(Int16(bitPattern: UInt16(littleEndian(bytes, 2))))
+        case "si32" where bytes.count >= 4:
+            return Double(Int32(bitPattern: littleEndian(bytes, 4)))
         default:
             return nil
         }
+    }
+
+    private static func littleEndian(_ bytes: [UInt8], _ count: Int) -> UInt32 {
+        bytes.prefix(count).reversed().reduce(UInt32(0)) { $0 << 8 | UInt32($1) }
     }
 }
 

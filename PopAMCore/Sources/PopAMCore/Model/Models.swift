@@ -159,9 +159,11 @@ public struct PowerSnapshot: Sendable, Equatable {
     /// Charger rating; nil while on battery.
     public let chargerRatingW: Int?
     public let onAC: Bool
+    /// The most this Mac accepts from a charger, when known.
+    public let maxInputW: Double?
 
     public init(adapterW: Double?, systemW: Double?, batteryW: Double?, lossW: Double?,
-                batteryTempC: Double?, chargerRatingW: Int?, onAC: Bool) {
+                batteryTempC: Double?, chargerRatingW: Int?, onAC: Bool, maxInputW: Double? = nil) {
         self.adapterW = adapterW
         self.systemW = systemW
         self.batteryW = batteryW
@@ -169,6 +171,7 @@ public struct PowerSnapshot: Sendable, Equatable {
         self.batteryTempC = batteryTempC
         self.chargerRatingW = chargerRatingW
         self.onAC = onAC
+        self.maxInputW = maxInputW
     }
 }
 

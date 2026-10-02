@@ -3,9 +3,9 @@ import Testing
 
 private func snap(adapter: Double? = 34.2, system: Double? = 18.1, battery: Double? = 14.6,
                   loss: Double? = 1.5, temp: Double? = 31.4, rating: Int? = 96,
-                  onAC: Bool = true) -> PowerSnapshot {
+                  onAC: Bool = true, maxInput: Double? = nil) -> PowerSnapshot {
     PowerSnapshot(adapterW: adapter, systemW: system, batteryW: battery, lossW: loss,
-                  batteryTempC: temp, chargerRatingW: rating, onAC: onAC)
+                  batteryTempC: temp, chargerRatingW: rating, onAC: onAC, maxInputW: maxInput)
 }
 
 struct PowerFlowTextTests {
@@ -70,5 +70,15 @@ struct PowerFlowTextTests {
         #expect(PowerFlowText.temperature(snap()) == "bat 31°C")
         #expect(PowerFlowText.charger(snap(rating: nil)) == nil)
         #expect(PowerFlowText.temperature(snap(temp: nil)) == nil)
+    }
+
+    @Test func chargerShowsMacMaxInput() {
+        #expect(PowerFlowText.charger(snap(rating: 100, maxInput: 89.2)) == "charger 100W · max 89W")
+    }
+
+    @Test func unpluggedWithoutBatteryReadingStillReadsAsBattery() {
+        let s = snap(adapter: 0, system: 12.3, battery: nil, loss: nil, rating: nil, onAC: false)
+        #expect(PowerFlowText.header(s) == "— out")
+        #expect(PowerFlowText.lines(s) == ["battery — ━━━━━ system    12.3W"])
     }
 }

@@ -14,7 +14,7 @@ public enum PowerFlowText {
 
     /// Adapter input on AC (or without a battery), battery output on battery.
     public static func header(_ s: PowerSnapshot) -> String {
-        if let battery = s.batteryW, isOnBattery(s) { return "\(watts(abs(battery))) out" }
+        if isOnBattery(s) { return "\(watts(s.batteryW.map(abs))) out" }
         return "\(watts(s.adapterW)) in"
     }
 
@@ -40,9 +40,11 @@ public enum PowerFlowText {
         }
     }
 
-    /// "charger 96W"; nil while on battery or when unknown.
+    /// "charger 100W · max 89W" (the Mac's own input limit, when known); nil while on battery.
     public static func charger(_ s: PowerSnapshot) -> String? {
-        s.chargerRatingW.map { "charger \($0)W" }
+        guard let rating = s.chargerRatingW else { return nil }
+        guard let max = s.maxInputW else { return "charger \(rating)W" }
+        return "charger \(rating)W · max \(Int(max.rounded()))W"
     }
 
     /// "bat 31°C".
@@ -50,7 +52,5 @@ public enum PowerFlowText {
         s.batteryTempC.map { "bat \(Int($0.rounded()))°C" }
     }
 
-    private static func isOnBattery(_ s: PowerSnapshot) -> Bool {
-        !s.onAC && s.batteryW != nil
-    }
+    private static func isOnBattery(_ s: PowerSnapshot) -> Bool { !s.onAC }
 }

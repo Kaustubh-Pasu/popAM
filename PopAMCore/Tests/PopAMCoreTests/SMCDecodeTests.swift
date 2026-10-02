@@ -22,19 +22,21 @@ struct SMCDecodeTests {
         #expect(abs(value - 19.626) < 0.001)
     }
 
-    @Test func decodesSignedFixedPoint() {
-        #expect(SMCDecode.value(type: "sp78", bytes: [0x1D, 0x80]) == 29.5)
-        #expect(SMCDecode.value(type: "sp78", bytes: [0xFF, 0x00]) == -1)
+    /// Apple silicon stores SMC integers little-endian. Bytes captured on an M5 running on battery.
+    @Test func decodesLittleEndianIntegers() {
+        #expect(SMCDecode.value(type: "ui8 ", bytes: [7]) == 7)
+        #expect(SMCDecode.value(type: "ui16", bytes: [0xBE, 0x30]) == 12_478)   // B0AV, mV
+        #expect(SMCDecode.value(type: "ui32", bytes: [0x00, 0x01, 0, 0]) == 256)
     }
 
-    @Test func decodesBigEndianUnsigned() {
-        #expect(SMCDecode.value(type: "ui8 ", bytes: [7]) == 7)
-        #expect(SMCDecode.value(type: "ui16", bytes: [0x01, 0x02]) == 258)
-        #expect(SMCDecode.value(type: "ui32", bytes: [0, 0, 0x01, 0x00]) == 256)
+    @Test func decodesSignedIntegers() {
+        #expect(SMCDecode.value(type: "si16", bytes: [0x64, 0xFE]) == -412)       // B0AC, mA
+        #expect(SMCDecode.value(type: "si32", bytes: [0xEC, 0xEB, 0xFF, 0xFF]) == -5_140)  // B0AP, mW
     }
 
     @Test func unknownTypeOrShortBufferIsNil() {
         #expect(SMCDecode.value(type: "ch8*", bytes: [1, 2, 3, 4]) == nil)
+        #expect(SMCDecode.value(type: "sp78", bytes: [0x1D, 0x80]) == nil)
         #expect(SMCDecode.value(type: "flt ", bytes: [1, 2]) == nil)
     }
 }
