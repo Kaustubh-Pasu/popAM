@@ -40,6 +40,8 @@ struct PopoverView: View {
                                       down: store.history.netDown, up: store.history.netUp)
         case .disk: DiskSection(reading: store.snapshots.disk)
         case .battery: BatterySection(reading: store.snapshots.battery)
+        case .power: PowerSection(reading: store.snapshots.power,
+                                  unit: settings.temperatureUnit)
         }
     }
 }

@@ -25,6 +25,7 @@
 		A9EF4423B848102D48D093FF /* MenuBarTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCDBADC9A80989F5D5BD81EA /* MenuBarTab.swift */; };
 		B35FB13DF6653B8B3A0C973C /* LaunchAtLogin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B78335859D3B7C3A3A8579 /* LaunchAtLogin.swift */; };
 		BB20E7E04C286AB7F9C2B0C5 /* SettingsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52520E5584390245EFDE4B29 /* SettingsWindowController.swift */; };
+		BEA86E19410B3B5B4E49BFB5 /* PowerSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20D205EF956B360ED60836D /* PowerSection.swift */; };
 		C217B7F0FF00A9EC4D6FE10E /* PopoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2526EEE690A78E8DB0F879D6 /* PopoverView.swift */; };
 		ECA705B093970B5A1324889E /* BlockBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0F26CC46AFC665638F679D /* BlockBar.swift */; };
 /* End PBXBuildFile section */
@@ -44,6 +45,7 @@
 		89B78335859D3B7C3A3A8579 /* LaunchAtLogin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLogin.swift; sourceTree = "<group>"; };
 		8D29ED3E9810DD263B3E03C5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		998A9192C560F8DABA5E6939 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A20D205EF956B360ED60836D /* PowerSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerSection.swift; sourceTree = "<group>"; };
 		BCDBADC9A80989F5D5BD81EA /* MenuBarTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarTab.swift; sourceTree = "<group>"; };
 		BE2E918A12F9F93D21BE1119 /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		CC6ACFCAEEFE22A8C3A26C76 /* DiskSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiskSection.swift; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 				0CA643021F5631D809CA4E0E /* HeaderSection.swift */,
 				EF868AE21835D888FF3C5B1C /* MemorySection.swift */,
 				D97148E4CEA777E3F171857E /* NetworkSection.swift */,
+				A20D205EF956B360ED60836D /* PowerSection.swift */,
 				676F3984B250FCE27638B40C /* StepGraph.swift */,
 				1B5B183E72301838BAA2285A /* Term.swift */,
 			);
@@ -227,6 +230,7 @@
 				264BF1EDE61AAE0E93B69DFF /* NetworkSection.swift in Sources */,
 				C217B7F0FF00A9EC4D6FE10E /* PopoverView.swift in Sources */,
 				0FAD3A8FF8C9D1F83B5AD5FF /* PopupTab.swift in Sources */,
+				BEA86E19410B3B5B4E49BFB5 /* PowerSection.swift in Sources */,
 				338E211D2A914DCDF1CDF2D4 /* SettingsView.swift in Sources */,
 				BB20E7E04C286AB7F9C2B0C5 /* SettingsWindowController.swift in Sources */,
 				A2AE7C7C36E7C7788622D595 /* StatusItemController.swift in Sources */,

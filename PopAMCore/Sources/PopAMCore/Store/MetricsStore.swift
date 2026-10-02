@@ -27,6 +27,7 @@ public final class MetricsStore {
     @ObservationIgnored private var disk: DiskSource
     @ObservationIgnored private let battery: BatterySource
     @ObservationIgnored private let system: SystemSource
+    @ObservationIgnored private let power: PowerSource
     @ObservationIgnored private var loop: Task<Void, Never>?
     @ObservationIgnored private var plannedMetrics: Set<MetricKind> = []
 
@@ -41,6 +42,7 @@ public final class MetricsStore {
         disk = DiskSource(space: readers.diskSpace, io: readers.diskIO)
         battery = BatterySource(reader: readers.battery)
         system = SystemSource(reader: readers.system)
+        power = PowerSource(reader: readers.power)
     }
 
     /// Metrics that need sampling right now.
@@ -87,6 +89,8 @@ public final class MetricsStore {
                 snapshots.disk = disk.sample(at: time)
             case .battery:
                 snapshots.battery = battery.sample()
+            case .power:
+                snapshots.power = power.sample()
             }
         }
     }
@@ -96,6 +100,7 @@ public final class MetricsStore {
         cpu.reset()
         network.reset()
         disk.reset()
+        power.reset()
         history = History()
         snapshots = Snapshots()
         tick()
@@ -158,6 +163,8 @@ public final class MetricsStore {
             snapshots.disk = .unavailable
         case .battery:
             snapshots.battery = .unavailable
+        case .power:
+            snapshots.power = .unavailable
         }
     }
 }

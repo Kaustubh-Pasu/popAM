@@ -30,4 +30,11 @@ struct MenuBarTextTests {
     @Test func emptyListIsEmptyString() {
         #expect(MenuBarText.make([], from: Snapshots()) == "")
     }
+    @Test func systemWatts() {
+        var s = Snapshots()
+        #expect(MenuBarText.make([.systemWatts], from: s) == "—")
+        s.power = .value(PowerSnapshot(adapterW: 34.2, systemW: 18.4, batteryW: 14.6, lossW: 1.2,
+                                       batteryTempC: nil, chargerRatingW: nil, onAC: true))
+        #expect(MenuBarText.make([.systemWatts], from: s) == "18W")
+    }
 }

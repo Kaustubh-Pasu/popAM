@@ -6,7 +6,7 @@ public enum MenuBarMode: String, Codable, CaseIterable, Sendable {
 }
 
 public enum MenuBarValue: String, Codable, CaseIterable, Sendable {
-    case cpuPercent, ramUsed, ramPercent, netDown, netUp, diskFree, batteryPercent
+    case cpuPercent, ramUsed, ramPercent, netDown, netUp, diskFree, batteryPercent, systemWatts
 
     public var metric: MetricKind {
         switch self {
@@ -15,6 +15,7 @@ public enum MenuBarValue: String, Codable, CaseIterable, Sendable {
         case .netDown, .netUp: .network
         case .diskFree: .disk
         case .batteryPercent: .battery
+        case .systemWatts: .power
         }
     }
 
@@ -27,6 +28,30 @@ public enum MenuBarValue: String, Codable, CaseIterable, Sendable {
         case .netUp: "Net ↑"
         case .diskFree: "Disk free"
         case .batteryPercent: "Battery %"
+        case .systemWatts: "System W"
+        }
+    }
+}
+
+public enum TemperatureUnit: String, Codable, CaseIterable, Sendable {
+    case celsius, fahrenheit
+
+    /// °F where the region measures in US units, °C everywhere else.
+    public static func regionDefault(_ locale: Locale) -> TemperatureUnit {
+        locale.measurementSystem == .us ? .fahrenheit : .celsius
+    }
+
+    public var symbol: String {
+        switch self {
+        case .celsius: "°C"
+        case .fahrenheit: "°F"
+        }
+    }
+
+    public func convert(celsius: Double) -> Double {
+        switch self {
+        case .celsius: celsius
+        case .fahrenheit: celsius * 9 / 5 + 32
         }
     }
 }
@@ -43,6 +68,9 @@ public final class SettingsStore {
     public var menuBarMode: MenuBarMode {
         didSet { save(menuBarMode, Key.menuBarMode) }
     }
+    public var temperatureUnit: TemperatureUnit {
+        didSet { save(temperatureUnit, Key.temperatureUnit) }
+    }
     /// At most `maxMenuBarValues`, no duplicates. Set via `setMenuBarValues(_:)`.
     public private(set) var menuBarValues: [MenuBarValue]
     /// Always contains every `MetricKind` exactly once.
@@ -57,13 +85,17 @@ public final class SettingsStore {
         static let menuBarValues = "menuBarValues"
         static let cardOrder = "cardOrder"
         static let enabledCards = "enabledCards"
+        static let temperatureUnit = "temperatureUnit"
     }
 
-    public init(defaults: UserDefaults = .standard) {
+    /// - Parameter locale: picks the temperature unit until the user chooses one; injectable for tests.
+    public init(defaults: UserDefaults = .standard, locale: Locale = .current) {
         self.defaults = defaults
         let interval = defaults.object(forKey: Key.refreshInterval) as? Double ?? 2
         refreshInterval = Self.allowedIntervals.contains(interval) ? interval : 2
         menuBarMode = Self.load(MenuBarMode.self, Key.menuBarMode, from: defaults) ?? .iconOnly
+        temperatureUnit = Self.load(TemperatureUnit.self, Key.temperatureUnit, from: defaults)
+            ?? .regionDefault(locale)
         menuBarValues = Self.normalizedValues(
             Self.load([MenuBarValue].self, Key.menuBarValues, from: defaults) ?? [.cpuPercent, .ramUsed])
         cardOrder = Self.normalizedOrder(Self.load([MetricKind].self, Key.cardOrder, from: defaults) ?? [])

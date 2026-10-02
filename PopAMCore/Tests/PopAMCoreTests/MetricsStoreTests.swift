@@ -8,6 +8,7 @@ final class MetricsStoreTests {
     private let suite = NSTemporaryDirectory() + "PopAMStoreTests-\(UUID().uuidString)"
     private let settings: SettingsStore
     private var time = TimeBox()
+    private let powerReader = FakePowerReader()
 
     deinit {
         UserDefaults(suiteName: suite)?.removePersistentDomain(forName: suite)
@@ -35,7 +36,7 @@ final class MetricsStoreTests {
             memory: FakeMemoryReader(), network: FakeNetworkReader(netScript),
             diskSpace: FakeDiskSpaceReader(), diskIO: FakeDiskIOReader([nil]),
             battery: FakeBatteryReader(isPresent: batteryPresent, raw: batteryPresent ? battery() : nil),
-            system: FakeSystemReader())
+            system: FakeSystemReader(), power: powerReader)
         let box = time
         return MetricsStore(settings: settings, readers: readers, now: { box.value })
     }
@@ -69,7 +70,7 @@ final class MetricsStoreTests {
         let store = makeStore()
         settings.setCardEnabled(.disk, false)
         store.popoverVisible = true
-        #expect(store.activeMetrics == [.cpu, .memory, .network, .battery])
+        #expect(store.activeMetrics == [.cpu, .memory, .network, .battery, .power])
         #expect(store.isLoopRunning)
         #expect(store.snapshots.memory.current != nil)   // no waiting a full interval
         #expect(store.snapshots.disk == .unavailable)
@@ -145,5 +146,31 @@ final class MetricsStoreTests {
         settings.menuBarMode = .iconOnly
         for _ in 0..<100 where store.isLoopRunning { await Task.yield() }
         #expect(!store.isLoopRunning)
+    }
+    @Test func powerSampledOnlyWhileActive() async {
+        let store = makeStore()
+        store.start()
+        #expect(store.snapshots.power == .unavailable)
+        store.popoverVisible = true
+        #expect(store.snapshots.power.current?.systemW == 18.1)
+        // Disabling re-plans asynchronously (observeSettings), which forgets the snapshot.
+        settings.setCardEnabled(.power, false)
+        for _ in 0..<100 where store.snapshots.power != .unavailable { await Task.yield() }
+        #expect(store.snapshots.power == .unavailable)
+    }
+
+    @Test func wakeReopensPowerReader() {
+        let store = makeStore()
+        store.handleWake()
+        #expect(powerReader.resets == 1)
+    }
+
+    @Test func menuBarWattsSamplesPowerWhileClosed() {
+        let store = makeStore()
+        settings.menuBarMode = .iconAndText
+        settings.setMenuBarValues([.systemWatts])
+        store.start()
+        #expect(store.activeMetrics == [.power])
+        #expect(store.snapshots.power.current != nil)
     }
 }

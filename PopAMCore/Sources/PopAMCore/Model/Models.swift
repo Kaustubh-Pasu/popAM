@@ -1,7 +1,7 @@
 import Foundation
 
 public enum MetricKind: String, CaseIterable, Codable, Sendable {
-    case cpu, memory, network, disk, battery
+    case cpu, memory, network, disk, battery, power
 
     public var title: String {
         switch self {
@@ -10,6 +10,7 @@ public enum MetricKind: String, CaseIterable, Codable, Sendable {
         case .network: "Network"
         case .disk: "Disk"
         case .battery: "Battery"
+        case .power: "Power"
         }
     }
 }
@@ -145,6 +146,35 @@ public struct BatterySnapshot: Sendable, Equatable {
     }
 }
 
+/// Where power is going right now, in watts.
+public struct PowerSnapshot: Sendable, Equatable {
+    /// 0 while on battery.
+    public let adapterW: Double?
+    public let systemW: Double?
+    /// + charging, − discharging; nil when there is no battery.
+    public let batteryW: Double?
+    /// Adapter power not reaching the system or battery; nil on battery or when unknown.
+    public let lossW: Double?
+    public let batteryTempC: Double?
+    /// Charger rating; nil while on battery.
+    public let chargerRatingW: Int?
+    public let onAC: Bool
+    /// The most this Mac accepts from a charger, when known.
+    public let maxInputW: Double?
+
+    public init(adapterW: Double?, systemW: Double?, batteryW: Double?, lossW: Double?,
+                batteryTempC: Double?, chargerRatingW: Int?, onAC: Bool, maxInputW: Double? = nil) {
+        self.adapterW = adapterW
+        self.systemW = systemW
+        self.batteryW = batteryW
+        self.lossW = lossW
+        self.batteryTempC = batteryTempC
+        self.chargerRatingW = chargerRatingW
+        self.onAC = onAC
+        self.maxInputW = maxInputW
+    }
+}
+
 public struct LoadAverage: Sendable, Equatable {
     public let one: Double
     public let five: Double
@@ -175,6 +205,7 @@ public struct Snapshots: Sendable, Equatable {
     public var network: Reading<NetworkSnapshot> = .unavailable
     public var disk: Reading<DiskSnapshot> = .unavailable
     public var battery: Reading<BatterySnapshot> = .unavailable
+    public var power: Reading<PowerSnapshot> = .unavailable
     public var system: Reading<SystemSnapshot> = .unavailable
 
     public init() {}

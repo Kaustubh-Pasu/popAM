@@ -8,10 +8,12 @@ public struct MetricReaders {
     public var diskIO: any DiskIOReading
     public var battery: any BatteryReading
     public var system: any SystemReading
+    public var power: any PowerReading
 
     public init(cpu: any CPUReading, topology: CoreTopology?, memory: any MemoryReading,
                 network: any NetworkReading, diskSpace: any DiskSpaceReading,
-                diskIO: any DiskIOReading, battery: any BatteryReading, system: any SystemReading) {
+                diskIO: any DiskIOReading, battery: any BatteryReading, system: any SystemReading,
+                power: any PowerReading) {
         self.cpu = cpu
         self.topology = topology
         self.memory = memory
@@ -20,12 +22,14 @@ public struct MetricReaders {
         self.diskIO = diskIO
         self.battery = battery
         self.system = system
+        self.power = power
     }
 
     public static func live() -> MetricReaders {
         MetricReaders(cpu: LiveCPUReader(), topology: LiveCPUReader.topology(),
                       memory: LiveMemoryReader(), network: LiveNetworkReader(),
                       diskSpace: LiveDiskSpaceReader(), diskIO: LiveDiskIOReader(),
-                      battery: LiveBatteryReader(), system: LiveSystemReader())
+                      battery: LiveBatteryReader(), system: LiveSystemReader(),
+                      power: LivePowerReader())
     }
 }
